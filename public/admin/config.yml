@@ -1,0 +1,37 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - file: "src/content/home.md"
+        label: "Home Page"
+        name: "home"
+        fields:
+          - { label: "Hero Title", name: "title", widget: "string" }
+          - { label: "Hero Text", name: "text", widget: "text" }
+      - file: "src/content/about.md"
+        label: "About Page"
+        name: "about"
+        fields:
+          - { label: "Content", name: "body", widget: "markdown" }
+  - name: "music"
+    label: "Music"
+    folder: "src/content/music"
+    create: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Embed", name: "embed", widget: "text" }
+  - name: "charities"
+    label: "Charities"
+    folder: "src/content/charities"
+    create: true
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "URL", name: "url", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }

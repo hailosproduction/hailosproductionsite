@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --hailo-pink: #FF77C0;
+}
+body{ background:#050507; }
+
+.prose-invert a{ color:var(--hailo-pink); }
+.bg-hailoPink{ background-color:var(--hailo-pink); color:black; }
