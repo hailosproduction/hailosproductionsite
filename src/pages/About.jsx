@@ -1,13 +1,3 @@
 import React from 'react';
 import '../styles.css';
-
-export default function About(){
-  return (
-    <section className="page-banner" style={{ backgroundImage: "url('/images/about-banner.jpg')" }}>
-      <div className="banner-content fade-page">
-        <h2 className="text-4xl font-bold">About Hāịlō</h2>
-        <p className="mt-4 max-w-2xl">Creating emotionally charged music that explores human depths while amplifying marginalized voices.</p>
-      </div>
-    </section>
-  );
-}
+export default function About(){return (<div className="fade-page"><section className="page-banner" style={{ backgroundImage: "url('/images/about-banner.jpg')" }}><div className="banner-content"><h2 className="text-4xl font-bold">About</h2><p className="mt-4 max-w-2xl">Creating emotionally charged music that explores human depths while amplifying marginalized voices.</p></div></section><section className="max-w-5xl mx-auto p-6 grid md:grid-cols-2 gap-6 items-center"><div><img src="/images/hero-still.jpg" alt="artwork" className="rounded-lg shadow-lg" /></div><div><h3 className="text-2xl font-semibold">My Story</h3><p className="mt-3">Keep your existing about text — this page is structured to present it with an image.</p></div></section></div>);}

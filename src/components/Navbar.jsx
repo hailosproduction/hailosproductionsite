@@ -9,11 +9,11 @@ export default function Navbar(){
       <div className="nav-inner">
         <div className="logo">Hāịlō</div>
         <nav className="hidden md:block">
-          <Link to='/' className='glow-hover mx-3'>Home</Link>
-          <Link to='/music' className='glow-hover mx-3'>Music</Link>
-          <Link to='/videos' className='glow-hover mx-3'>Videos</Link>
-          <Link to='/about' className='glow-hover mx-3'>About</Link>
-          <Link to='/charities' className='glow-hover mx-3'>Charities</Link>
+          <Link to='/' className='nav-link glow-hover mx-3'>Home</Link>
+          <Link to='/music' className='nav-link glow-hover mx-3'>Music</Link>
+          <Link to='/videos' className='nav-link glow-hover mx-3'>Videos</Link>
+          <Link to='/about' className='nav-link glow-hover mx-3'>About</Link>
+          <Link to='/charities' className='nav-link glow-hover mx-3'>Charities</Link>
         </nav>
         <button className="md:hidden" onClick={()=>setOpen(!open)} aria-label="menu">
           <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -7,19 +7,19 @@ export default function ParticlesBackground(){
     const ctx = canvas.getContext('2d');
     let w = canvas.width = window.innerWidth;
     let h = canvas.height = window.innerHeight;
-    const particles = [];
-    const PARTICLE_COUNT = Math.max(30, Math.floor((w*h)/70000));
+    let particles = [];
+    const COUNT = Math.max(30, Math.floor((w*h)/90000));
 
     function init(){
-      particles.length = 0;
-      for(let i=0;i<PARTICLE_COUNT;i++){
+      particles = [];
+      for(let i=0;i<COUNT;i++){
         particles.push({
           x: Math.random()*w,
           y: Math.random()*h,
-          r: Math.random()*1.4+0.3,
-          vx: (Math.random()-0.5)*0.15,
-          vy: (Math.random()-0.5)*0.15,
-          alpha: 0.6 + Math.random()*0.4
+          r: Math.random()*1.6 + 0.4,
+          vx: (Math.random()-0.5)*0.12,
+          vy: (Math.random()-0.5)*0.12,
+          alpha: 0.4 + Math.random()*0.6
         });
       }
     }
@@ -32,7 +32,6 @@ export default function ParticlesBackground(){
 
     function draw(){
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = 'rgba(255,255,255,0.0)';
       for(const p of particles){
         ctx.beginPath();
         ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
@@ -48,10 +47,7 @@ export default function ParticlesBackground(){
     window.addEventListener('resize', resize);
     init();
     draw();
-
-    return ()=>{
-      window.removeEventListener('resize', resize);
-    }
+    return ()=> window.removeEventListener('resize', resize);
   },[]);
 
   return <canvas id="particles-canvas" className="particles-canvas" />;
