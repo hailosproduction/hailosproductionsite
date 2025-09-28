@@ -1,3 +1,0 @@
-import React from 'react';
-import '../styles.css';
-export default function Music(){return (<div className="fade-page"><section className="page-banner" style={{ backgroundImage: "url('/images/hero-still.jpg')" }}><div className="banner-content"><h2 className="text-4xl font-bold">Music & Releases</h2><p className="mt-4 max-w-2xl">Embed SoundCloud, Spotify or link to stores.</p></div></section><main className="max-w-5xl mx-auto p-6"><div className="grid gap-6"><article className="bg-white/3 p-4 rounded-lg"><h4 className="font-semibold">Release Title — 2025</h4><div className="mt-2">Embed placeholder</div></article></div></main></div>);}

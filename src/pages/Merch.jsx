@@ -1,3 +1,0 @@
-import React from 'react';
-import '../styles.css';
-export default function Merch(){return (<div className="fade-page"><section className="page-banner" style={{ backgroundImage: "url('/images/hero-still.jpg')" }}><div className="banner-content"><h2 className="text-4xl font-bold">Merch</h2><p className="mt-4 max-w-2xl">Merch coming soon — link to store or embed Gumroad/Shopify.</p></div></section><main className="max-w-5xl mx-auto p-6"><div className="grid gap-6"><div className="bg-white/3 p-4 rounded-lg">Merch placeholder</div></div></main></div>);}

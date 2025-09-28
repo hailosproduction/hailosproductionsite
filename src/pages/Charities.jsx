@@ -1,3 +1,0 @@
-import React from 'react';
-import '../styles.css';
-export default function Charities(){return (<div className="fade-page"><section className="page-banner" style={{ backgroundImage: "url('/images/about-banner.jpg')" }}><div className="banner-content"><h2 className="text-4xl font-bold">Charities & Organisations</h2><p className="mt-4 max-w-2xl">I support autism, trans rights, LGBTQIA+, environmental and mental health organisations.</p></div></section><main className="max-w-5xl mx-auto p-6 grid gap-4"><article className="bg-white/3 p-4 rounded-lg">Charity placeholder</article></main></div>);}
