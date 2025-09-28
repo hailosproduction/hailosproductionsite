@@ -1,20 +1,13 @@
 import React from 'react';
-import '../index.css';
+import '../styles.css';
 
-export default function Contact() {
+export default function Contact(){
   return (
-    <div className="page-bg">
-      <div className="content-container fade-in">
-        <h1 className="text-4xl font-bold text-white mb-4">Contact</h1>
-        <form className="flex flex-col gap-4 max-w-md">
-          <input type="text" placeholder="Your Name" className="p-2 rounded-md" />
-          <input type="email" placeholder="Your Email" className="p-2 rounded-md" />
-          <textarea placeholder="Your Message" className="p-2 rounded-md"></textarea>
-          <button type="submit" className="px-4 py-2 bg-pink-500 text-white rounded-md hover:glow">
-            Send
-          </button>
-        </form>
+    <section className="page-banner" style={{ backgroundImage: "url('/images/contact-banner.jpg')" }}>
+      <div className="banner-content fade-page">
+        <h2 className="text-4xl font-bold">Contact</h2>
+        <p className="mt-4 max-w-2xl">For bookings, collaborations or press, reach out via email or the contact form.</p>
       </div>
-    </div>
+    </section>
   );
 }
