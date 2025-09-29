@@ -98,3 +98,107 @@
 98|    return await db.get_music_tracks()
 99|
 100|@admin_router.post("/music", response_model=MusicTrack)
+### **File: `backend/server.py` (Continued - lines 100-200)**
+Action: file_editor view /app/backend/server.py
+Observation: /app/backend/server.py:
+100|@admin_router.post("/music", response_model=MusicTrack)
+101|async def create_music_track(track_data: MusicTrackCreate):
+102|    """Create new music track"""
+103|    return await db.create_music_track(track_data)
+104|
+105|@admin_router.put("/music/{track_id}", response_model=MusicTrack)
+106|async def update_music_track(track_id: str, track_data: MusicTrackUpdate):
+107|    """Update music track"""
+108|    track = await db.update_music_track(track_id, track_data)
+109|    if not track:
+110|        raise HTTPException(status_code=404, detail="Track not found")
+111|    return track
+112|
+113|@admin_router.delete("/music/{track_id}")
+114|async def delete_music_track(track_id: str):
+115|    """Delete music track"""
+116|    success = await db.delete_music_track(track_id)
+117|    if not success:
+118|        raise HTTPException(status_code=404, detail="Track not found")
+119|    return {"message": "Track deleted successfully"}
+120|
+121|# Video Management
+122|@admin_router.get("/videos", response_model=List[Video])
+123|async def admin_get_videos():
+124|    """Get all videos (admin view)"""
+125|    return await db.get_videos()
+126|
+127|@admin_router.post("/videos", response_model=Video)
+128|async def create_video(video_data: VideoCreate):
+129|    """Create new video"""
+130|    return await db.create_video(video_data)
+131|
+132|@admin_router.put("/videos/{video_id}", response_model=Video)
+133|async def update_video(video_id: str, video_data: VideoUpdate):
+134|    """Update video"""
+135|    video = await db.update_video(video_id, video_data)
+136|    if not video:
+137|        raise HTTPException(status_code=404, detail="Video not found")
+138|    return video
+139|
+140|@admin_router.delete("/videos/{video_id}")
+141|async def delete_video(video_id: str):
+142|    """Delete video"""
+143|    success = await db.delete_video(video_id)
+144|    if not success:
+145|        raise HTTPException(status_code=404, detail="Video not found")
+146|    return {"message": "Video deleted successfully"}
+147|
+148|# Artwork Management
+149|@admin_router.get("/artwork", response_model=List[Artwork])
+150|async def admin_get_artwork():
+151|    """Get all artwork (admin view)"""
+152|    return await db.get_artwork()
+153|
+154|@admin_router.post("/artwork", response_model=Artwork)
+155|async def create_artwork(artwork_data: ArtworkCreate):
+156|    """Create new artwork"""
+157|    return await db.create_artwork(artwork_data)
+158|
+159|@admin_router.put("/artwork/{artwork_id}", response_model=Artwork)
+160|async def update_artwork(artwork_id: str, artwork_data: ArtworkUpdate):
+161|    """Update artwork"""
+162|    artwork = await db.update_artwork(artwork_id, artwork_data)
+163|    if not artwork:
+164|        raise HTTPException(status_code=404, detail="Artwork not found")
+165|    return artwork
+166|
+167|@admin_router.delete("/artwork/{artwork_id}")
+168|async def delete_artwork(artwork_id: str):
+169|    """Delete artwork"""
+170|    success = await db.delete_artwork(artwork_id)
+171|    if not success:
+172|        raise HTTPException(status_code=404, detail="Artwork not found")
+173|    return {"message": "Artwork deleted successfully"}
+174|
+175|# Merchandise Management
+176|@admin_router.get("/merchandise", response_model=List[Merchandise])
+177|async def admin_get_merchandise():
+178|    """Get all merchandise (admin view)"""
+179|    return await db.get_merchandise()
+180|
+181|@admin_router.post("/merchandise", response_model=Merchandise)
+182|async def create_merchandise(merch_data: MerchandiseCreate):
+183|    """Create new merchandise"""
+184|    return await db.create_merchandise(merch_data)
+185|
+186|@admin_router.put("/merchandise/{merch_id}", response_model=Merchandise)
+187|async def update_merchandise(merch_id: str, merch_data: MerchandiseUpdate):
+188|    """Update merchandise"""
+189|    merch = await db.update_merchandise(merch_id, merch_data)
+190|    if not merch:
+191|        raise HTTPException(status_code=404, detail="Merchandise not found")
+192|    return merch
+193|
+194|@admin_router.delete("/merchandise/{merch_id}")
+195|async def delete_merchandise(merch_id: str):
+196|    """Delete merchandise"""
+197|    success = await db.delete_merchandise(merch_id)
+198|    if not success:
+199|        raise HTTPException(status_code=404, detail="Merchandise not found")
+200|    return {"message": "Merchandise deleted successfully"}
