@@ -1,3 +1,4 @@
+
 150|                            required
 151|                            className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-colors duration-300"
 152|                            placeholder="Your name"
@@ -149,3 +150,48 @@
 298|      </section>
 299|
 300|      {/* Collaboration Focus */}
+301|      <section className="py-16 bg-gray-950/50">
+302|        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+303|          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+304|            Let's Create <span className="text-pink-500">Together</span>
+305|          </h2>
+306|          <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+307|            Hāịlō is always interested in collaborating with like-minded artists, advocates, and organizations 
+308|            who share a passion for meaningful music and positive social impact.
+309|          </p>
+310|
+311|          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+312|            {[
+313|              {
+314|                title: 'Musical Collaborations',
+315|                description: 'Features, remixes, and joint projects with artists who share similar values',
+316|                icon: '🎵'
+317|              },
+318|              {
+319|                title: 'Advocacy Partnerships',
+320|                description: 'Working with organizations to amplify important causes through music',
+321|                icon: '🤝'
+322|              },
+323|              {
+324|                title: 'Creative Projects',
+325|                description: 'Sound design, visual art collaborations, and multimedia experiences',
+326|                icon: '🎨'
+327|              }
+328|            ].map((collab, index) => (
+329|              <div 
+330|                key={index}
+331|                className="bg-gray-900/30 rounded-xl p-6 border border-gray-800 hover:border-pink-500/50 transition-all duration-300"
+332|              >
+333|                <div className="text-3xl mb-4">{collab.icon}</div>
+334|                <h3 className="text-xl font-semibold text-white mb-3">{collab.title}</h3>
+335|                <p className="text-gray-400 text-sm">{collab.description}</p>
+336|              </div>
+337|            ))}
+338|          </div>
+339|        </div>
+340|      </section>
+341|    </div>
+342|  );
+343|};
+344|
+345|export default Contact;
