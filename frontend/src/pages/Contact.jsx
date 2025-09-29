@@ -1,4 +1,3 @@
-
 150|                            required
 151|                            className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-colors duration-300"
 152|                            placeholder="Your name"
