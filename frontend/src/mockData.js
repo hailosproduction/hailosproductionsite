@@ -1,5 +1,3 @@
-```javascript
-
 // Mock data for Hāịlō's music career website
 
 export const artistInfo = {
@@ -371,4 +369,3 @@ image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&h=300
 }
 
 ];
-```
