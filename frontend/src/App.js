@@ -1,40 +1,33 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Music from "./pages/Music";
-import Videos from "./pages/Videos";
-import Artwork from "./pages/Artwork";
-import Merchandise from "./pages/Merchandise";
-import Charities from "./pages/Charities";
-import News from "./pages/News";
-import Admin from "./pages/Admin";
+import React from 'react';
+import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App min-h-screen bg-gray-900 text-white">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/music" element={<Music />} />
-            <Route path="/videos" element={<Videos />} />
-            <Route path="/artwork" element={<Artwork />} />
-            <Route path="/merchandise" element={<Merchandise />} />
-            <Route path="/charities" element={<Charities />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <div className="App min-h-screen bg-gray-900 text-white">
+      <header className="bg-gray-900 border-b border-pink-500/20 p-4">
+        <h1 className="text-2xl font-bold text-pink-500 text-center">Hāịlō</h1>
+        <p className="text-center text-gray-300">Dark Melodies, Bright Advocacy</p>
+      </header>
+      
+      <main className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-4xl font-bold mb-8">Welcome to Hāịlō</h2>
+        <p className="text-lg text-gray-300 mb-8">
+          Emotionally charged music exploring human experience while advocating for marginalized communities.
+        </p>
+        <div className="space-x-4">
+          <button className="bg-pink-600 text-white px-8 py-3 rounded-lg hover:bg-pink-700">
+            Listen Now
+          </button>
+          <button className="border border-pink-500 text-pink-500 px-8 py-3 rounded-lg hover:bg-pink-500 hover:text-white">
+            Learn More
+          </button>
+        </div>
+      </main>
+      
+      <footer className="bg-gray-900 border-t border-pink-500/20 mt-auto p-4 text-center text-gray-400">
+        <p>&copy; 2024 Hāịlō. All rights reserved.</p>
+      </footer>
+    </div>
   );
 }
 
