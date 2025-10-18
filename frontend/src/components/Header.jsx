@@ -1,80 +1,165 @@
 import React, { useState } from 'react';
+
 import { Link, useLocation } from 'react-router-dom';
 
+import { Menu, X } from 'lucide-react';
+
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
 
-  const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/music', label: 'Music' },
-    { path: '/videos', label: 'Videos' },
-    { path: '/artwork', label: 'Artwork' },
-    { path: '/merchandise', label: 'Merchandise' },
-    { path: '/charities', label: 'Charities' },
-    { path: '/news', label: 'News' },
-    { path: '/contact', label: 'Contact' },
-  ];
+const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  return (
-    <header className="bg-gray-900 border-b border-pink-500/20 sticky top-0 z-50">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-2xl font-bold text-pink-500">
-            Hāịlō
-          </Link>
+const location = useLocation();
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`transition-colors duration-200 hover:text-pink-500 ${
-                  location.pathname === item.path
-                    ? 'text-pink-500'
-                    : 'text-gray-300'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+const navItems = [
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
+{ name: 'Home', path: '/' },
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`block py-2 px-4 transition-colors duration-200 hover:text-pink-500 ${
-                  location.pathname === item.path
-                    ? 'text-pink-500'
-                    : 'text-gray-300'
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        )}
-      </nav>
-    </header>
-  );
+{ name: 'About', path: '/about' },
+
+{ name: 'Music', path: '/music' },
+
+{ name: 'Videos', path: '/videos' },
+
+{ name: 'Artwork', path: '/artwork' },
+
+{ name: 'Merchandise', path: '/merchandise' },
+
+{ name: 'Charities', path: '/charities' },
+
+{ name: 'News', path: '/news' },
+
+{ name: 'Contact', path: '/contact' }
+
+];
+
+const isActive = (path) => location.pathname === path;
+
+return (
+
+<header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-pink-500/20">
+
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+<div className="flex justify-between items-center h-16">
+
+{/* Logo */}
+
+<Link
+
+to="/"
+
+className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent hover:from-pink-400 hover:to-purple-500 transition-all duration-300"
+
+>
+
+Hāịlō
+
+</Link>
+
+{/* Desktop Navigation */}
+
+<nav className="hidden md:flex space-x-8">
+
+{navItems.map((item) => (
+
+<Link
+
+key={item.name}
+
+to={item.path}
+
+className={`relative px-3 py-2 text-sm font-medium transition-all duration-300 ${
+
+isActive(item.path)
+
+? 'text-pink-400'
+
+: 'text-gray-300 hover:text-pink-300'
+
+}`}
+
+>
+
+{item.name}
+
+{isActive(item.path) && (
+
+<div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full" />
+
+)}
+
+</Link>
+
+))}
+
+</nav>
+
+{/* Mobile Menu Button */}
+
+<button
+
+onClick={() => setIsMenuOpen(!isMenuOpen)}
+
+className="md:hidden p-2 text-gray-300 hover:text-pink-300 transition-colors duration-300"
+
+aria-label="Toggle menu"
+
+>
+
+{isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+
+</button>
+
+</div>
+
+{/* Mobile Navigation */}
+
+{isMenuOpen && (
+
+<div className="md:hidden absolute top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-md border-b border-pink-500/20">
+
+<nav className="px-4 py-4 space-y-2">
+
+{navItems.map((item) => (
+
+<Link
+
+key={item.name}
+
+to={item.path}
+
+onClick={() => setIsMenuOpen(false)}
+
+className={`block px-3 py-2 text-base font-medium rounded-lg transition-all duration-300 ${
+
+isActive(item.path)
+
+? 'text-pink-400 bg-pink-500/10'
+
+: 'text-gray-300 hover:text-pink-300 hover:bg-pink-500/5'
+
+}`}
+
+>
+
+{item.name}
+
+</Link>
+
+))}
+
+</nav>
+
+</div>
+
+)}
+
+</div>
+
+</header>
+
+);
+
 };
 
 export default Header;
