@@ -1,8 +1,3 @@
-export default News;
-Let me continue with the final pages...
-
-13. Create frontend/src/pages/Contact.jsx:
-
 import React, { useState } from 'react';
 import { Mail, MessageCircle, Users, Calendar, Send, CheckCircle } from 'lucide-react';
 
