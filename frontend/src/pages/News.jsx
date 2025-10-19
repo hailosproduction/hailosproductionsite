@@ -1,251 +1,613 @@
 import React, { useState } from 'react';
-import { Calendar, Tag, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Music, Heart, Mic, X } from 'lucide-react';
+import { newsArticles } from '../mockData';
 
 const News = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
-  const newsArticles = [
-    {
-      id: 1,
-      title: "New Single 'Neon Dreams' Drops This Friday",
-      excerpt: "Hāịlō's latest track explores the intersection of technology and human emotion in an increasingly digital world.",
-      content: "This latest release from Hāịlō represents a significant evolution in their artistic journey, blending the signature dark atmospheric sound with more vibrant electronic elements...",
-      image: "https://images.unsplash.com/photo-1571974599782-87624638275c?w=600&h=300&fit=crop",
-      category: "music",
-      date: "2024-12-15",
-      featured: true,
-      readTime: "3 min read"
-    },
-    {
-      id: 2,
-      title: "Partnering with Local LGBTQIA+ Organizations",
-      excerpt: "Exciting collaboration announced to support transgender youth through music therapy and community programs.",
-      content: "Hāịlō is proud to announce a groundbreaking partnership with several local LGBTQIA+ organizations to create safe spaces and support systems...",
-      image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=300&fit=crop",
-      category: "advocacy",
-      date: "2024-12-10",
-      featured: true,
-      readTime: "5 min read"
-    },
-    {
-      id: 3,
-      title: "Behind the Scenes: Sound Design Process",
-      excerpt: "Take a deep dive into the creative process behind the atmospheric soundscapes that define Hāịlō's unique sound.",
-      content: "Creating the haunting, atmospheric soundscapes that define Hāịlō's music is both an art and a science...",
-      image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&h=300&fit=crop",
-      category: "behind-scenes",
-      date: "2024-12-05",
-      featured: false,
-      readTime: "7 min read"
-    },
-    {
-      id: 4,
-      title: "Upcoming Pride Festival Performance",
-      excerpt: "Hāịlō announces headlining performance at the annual Pride Festival, with all proceeds supporting local LGBTQIA+ youth.",
-      content: "Music has always been a powerful tool for social change, and Hāịlō is excited to use this platform to support the LGBTQIA+ community...",
-      image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=300&fit=crop",
-      category: "advocacy",
-      date: "2024-11-28",
-      featured: false,
-      readTime: "4 min read"
-    },
-    {
-      id: 5,
-      title: "Mental Health Awareness Month Initiative",
-      excerpt: "Special fundraising campaign launched to support mental health resources in underserved communities.",
-      content: "Throughout Mental Health Awareness Month, Hāịlō is partnering with Mental Health America to raise awareness and funds...",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=300&fit=crop",
-      category: "advocacy",
-      date: "2024-11-20",
-      featured: false,
-      readTime: "6 min read"
-    },
-    {
-      id: 6,
-      title: "New Music Video: 'Breaking Barriers' Released",
-      excerpt: "The powerful visual narrative for 'Breaking Barriers' showcases themes of liberation and personal growth.",
-      content: "The music video for 'Breaking Barriers' is a visual metaphor for overcoming societal limitations and personal struggles...",
-      image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&h=300&fit=crop",
-      category: "music",
-      date: "2024-11-15",
-      featured: false,
-      readTime: "3 min read"
-    }
+  const categories = [
+    { id: 'all', name: 'All News', icon: Calendar },
+    { id: 'music', name: 'Music Releases', icon: Music },
+    { id: 'advocacy', name: 'Advocacy Work', icon: Heart },
+    { id: 'behind-scenes', name: 'Behind the Scenes', icon: Mic }
   ];
 
-  const categories = ['all', 'music', 'advocacy', 'behind-scenes'];
-  const categoryLabels = {
-    'all': 'All News',
-    'music': 'Music Releases',
-    'advocacy': 'Advocacy',
-    'behind-scenes': 'Behind the Scenes'
+  const getCategoryFromTitle = (title) => {
+    if (title.toLowerCase().includes('single') || title.toLowerCase().includes('music')) return 'music';
+    if (title.toLowerCase().includes('partner') || title.toLowerCase().includes('organization')) return 'advocacy';
+    if (title.toLowerCase().includes('behind') || title.toLowerCase().includes('process')) return 'behind-scenes';
+    return 'music';
   };
-
-  const categoryColors = {
-    'music': 'bg-pink-500/20 text-pink-400',
-    'advocacy': 'bg-purple-500/20 text-purple-400',
-    'behind-scenes': 'bg-cyan-500/20 text-cyan-400'
-  };
-
-  const filteredArticles = selectedCategory === 'all' 
-    ? newsArticles 
-    : newsArticles.filter(article => article.category === selectedCategory);
-
-  const featuredArticles = newsArticles.filter(article => article.featured);
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
+  const timeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
+    return `${Math.ceil(diffDays / 30)} months ago`;
   };
 
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={{ paddingTop: '64px', minHeight: '100vh' }}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">News</span>
+      <section style={{ 
+        padding: '64px 0', 
+        background: 'linear-gradient(to bottom, rgb(3, 7, 18), rgb(17, 24, 39))'
+      }}>
+        <div style={{ 
+          maxWidth: '896px', 
+          margin: '0 auto', 
+          padding: '0 16px', 
+          textAlign: 'center' 
+        }}>
+          <h1 style={{ 
+            fontSize: '3.75rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '16px'
+          }}>
+            <Calendar size={48} style={{ color: '#ec4899' }} />
+            News & Updates
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
-            Stay updated on music releases, advocacy initiatives, and behind-the-scenes insights
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db', 
+            lineHeight: '1.75', 
+            maxWidth: '672px', 
+            margin: '0 auto' 
+          }}>
+            Stay connected with Hāịlō's musical journey, advocacy work, and behind-the-scenes insights 
+            into the creative process and social impact initiatives.
           </p>
         </div>
       </section>
 
-      {/* Featured Articles */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Featured <span className="text-pink-500">Stories</span>
-          </h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-            {featuredArticles.map((article, index) => (
-              <article key={article.id} className={`group cursor-pointer ${index === 0 ? 'lg:row-span-2' : ''}`}>
-                <div className="bg-gray-900/30 rounded-2xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300 h-full">
-                  <div className={`relative overflow-hidden ${index === 0 ? 'aspect-video' : 'aspect-[16/10]'}`}>
+      {/* Latest Article Featured */}
+      {newsArticles.length > 0 && (
+        <section style={{ padding: '64px 0' }}>
+          <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px' }}>
+            <div style={{ 
+              background: 'linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55))',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '1px solid rgba(236, 72, 153, 0.2)',
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gap: '0'
+            }}>
+              <div style={{ 
+                position: 'relative', 
+                aspectRatio: '16/9',
+                overflow: 'hidden' 
+              }}>
+                <img 
+                  src={newsArticles[0].image} 
+                  alt={newsArticles[0].title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'transform 0.5s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                />
+                <div style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '16px',
+                  background: '#db2777',
+                  color: 'white',
+                  fontSize: '0.875rem',
+                  padding: '4px 12px',
+                  borderRadius: '9999px',
+                  fontWeight: '500'
+                }}>
+                  Latest News
+                </div>
+                <div style={{
+                  position: 'absolute',
+                  bottom: '16px',
+                  right: '16px',
+                  background: 'rgba(0, 0, 0, 0.7)',
+                  color: 'white',
+                  fontSize: '0.875rem',
+                  padding: '4px 12px',
+                  borderRadius: '9999px'
+                }}>
+                  {timeAgo(newsArticles[0].date)}
+                </div>
+              </div>
+              
+              <div style={{ 
+                padding: '32px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'center' 
+              }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                    <span style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      color: '#f9a8d4',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      background: 'rgba(236, 72, 153, 0.1)',
+                      padding: '4px 12px',
+                      borderRadius: '9999px'
+                    }}>
+                      <Music size={14} />
+                      Music Release
+                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#9ca3af', fontSize: '0.875rem' }}>
+                      <Calendar size={14} />
+                      {formatDate(newsArticles[0].date)}
+                    </div>
+                  </div>
+                </div>
+                <h2 style={{ 
+                  fontSize: '2.25rem', 
+                  fontWeight: 'bold', 
+                  color: 'white', 
+                  marginBottom: '16px' 
+                }}>
+                  {newsArticles[0].title}
+                </h2>
+                <p style={{ 
+                  color: '#d1d5db', 
+                  fontSize: '1.125rem', 
+                  marginBottom: '24px', 
+                  lineHeight: '1.75' 
+                }}>
+                  {newsArticles[0].excerpt}
+                </p>
+                <button 
+                  onClick={() => setSelectedArticle(newsArticles[0])}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: 'linear-gradient(to right, #db2777, #9333ea)',
+                    color: 'white',
+                    padding: '12px 32px',
+                    borderRadius: '9999px',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    alignSelf: 'flex-start'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(to right, #ec4899, #a855f7)';
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'linear-gradient(to right, #db2777, #9333ea)';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  Read Full Article
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* All Articles Grid */}
+      <section style={{ padding: '64px 0', background: 'rgba(3, 7, 18, 0.5)' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 16px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ 
+              fontSize: '2.25rem', 
+              fontWeight: 'bold', 
+              color: 'white', 
+              marginBottom: '16px' 
+            }}>
+              Recent <span style={{ color: '#ec4899' }}>Articles</span>
+            </h2>
+            <p style={{ color: '#9ca3af', fontSize: '1.125rem' }}>
+              Keep up with the latest updates from Hāịlō's musical and advocacy journey
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+            gap: '32px' 
+          }}>
+            {newsArticles.map((article) => {
+              const category = getCategoryFromTitle(article.title);
+              const categoryInfo = categories.find(cat => cat.id === category) || categories[0];
+              const IconComponent = categoryInfo.icon;
+              
+              return (
+                <article 
+                  key={article.id}
+                  onClick={() => setSelectedArticle(article)}
+                  style={{
+                    background: 'rgba(17, 24, 39, 0.5)',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid rgb(31, 41, 55)',
+                    transition: 'all 0.3s',
+                    cursor: 'pointer',
+                    transform: 'scale(1)'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.5)';
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = 'rgb(31, 41, 55)';
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
+                >
+                  <div style={{ 
+                    position: 'relative', 
+                    aspectRatio: '16/9',
+                    overflow: 'hidden' 
+                  }}>
                     <img 
                       src={article.image} 
                       alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 0.5s'
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute top-4 left-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${categoryColors[article.category]}`}>
-                        {categoryLabels[article.category]}
-                      </span>
+                    <div style={{
+                      position: 'absolute',
+                      top: '12px',
+                      left: '12px',
+                      background: 'rgba(0, 0, 0, 0.7)',
+                      color: 'white',
+                      fontSize: '0.75rem',
+                      padding: '4px 8px',
+                      borderRadius: '9999px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}>
+                      <IconComponent size={12} />
+                      {categoryInfo.name}
                     </div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className={`font-bold text-white mb-2 group-hover:text-pink-300 transition-colors duration-300 ${index === 0 ? 'text-2xl' : 'text-lg'}`}>
-                        {article.title}
-                      </h3>
-                      {index === 0 && (
-                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">
-                          {article.excerpt}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-4 text-xs text-gray-300">
-                        <span className="flex items-center gap-1">
-                          <Calendar size={12} />
-                          {formatDate(article.date)}
-                        </span>
-                        <span>{article.readTime}</span>
+                    <div style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      background: 'rgba(0, 0, 0, 0.7)',
+                      color: 'white',
+                      fontSize: '0.75rem',
+                      padding: '4px 8px',
+                      borderRadius: '9999px'
+                    }}>
+                      {timeAgo(article.date)}
+                    </div>
+                  </div>
+                  
+                  <div style={{ padding: '24px' }}>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '8px', 
+                      color: '#9ca3af', 
+                      fontSize: '0.875rem', 
+                      marginBottom: '12px' 
+                    }}>
+                      <Calendar size={14} />
+                      {formatDate(article.date)}
+                    </div>
+                    <h3 style={{ 
+                      fontSize: '1.25rem', 
+                      fontWeight: '600', 
+                      color: 'white', 
+                      marginBottom: '12px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>
+                      {article.title}
+                    </h3>
+                    <p style={{ 
+                      color: '#9ca3af', 
+                      fontSize: '0.875rem', 
+                      marginBottom: '16px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}>
+                      {article.excerpt}
+                    </p>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'space-between' 
+                    }}>
+                      <span style={{ color: '#f9a8d4', fontSize: '0.875rem', fontWeight: '500' }}>
+                        {categoryInfo.name}
+                      </span>
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '4px', 
+                        color: '#9ca3af', 
+                        fontSize: '0.875rem' 
+                      }}>
+                        <Clock size={12} />
+                        <span>3 min read</span>
                       </div>
                     </div>
                   </div>
-                  {index !== 0 && (
-                    <div className="p-6">
-                      <p className="text-gray-400 text-sm line-clamp-2 mb-4">
-                        {article.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">
-                          {formatDate(article.date)}
-                        </span>
-                        <span className="text-pink-400 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all duration-300">
-                          Read More
-                          <ArrowRight size={14} />
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* All Articles */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4 sm:mb-0">
-              All <span className="text-pink-500">Articles</span>
+      {/* Newsletter Signup */}
+      <section style={{ padding: '64px 0' }}>
+        <div style={{ maxWidth: '896px', margin: '0 auto', padding: '0 16px', textAlign: 'center' }}>
+          <div style={{ 
+            background: 'linear-gradient(to right, rgb(17, 24, 39), rgb(31, 41, 55))',
+            borderRadius: '16px',
+            padding: '32px',
+            border: '1px solid rgba(236, 72, 153, 0.2)'
+          }}>
+            <Calendar size={48} style={{ color: '#ec4899', margin: '0 auto 16px' }} />
+            <h2 style={{ 
+              fontSize: '1.875rem', 
+              fontWeight: 'bold', 
+              color: 'white', 
+              marginBottom: '16px' 
+            }}>
+              Stay <span style={{ color: '#ec4899' }}>Updated</span>
             </h2>
+            <p style={{ 
+              color: '#d1d5db', 
+              fontSize: '1.125rem', 
+              marginBottom: '24px', 
+              lineHeight: '1.75' 
+            }}>
+              Get the latest news about music releases, advocacy initiatives, and exclusive behind-the-scenes content 
+              delivered straight to your inbox.
+            </p>
+            <form style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '16px', 
+              maxWidth: '448px', 
+              margin: '0 auto' 
+            }}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                style={{
+                  flex: '1',
+                  padding: '12px 16px',
+                  background: 'rgb(31, 41, 55)',
+                  border: '1px solid rgb(55, 65, 81)',
+                  borderRadius: '9999px',
+                  color: 'white',
+                  outline: 'none',
+                  transition: 'border-color 0.3s'
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#ec4899'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(55, 65, 81)'}
+              />
+              <button
+                type="submit"
+                style={{
+                  background: 'linear-gradient(to right, #db2777, #9333ea)',
+                  color: 'white',
+                  padding: '12px 32px',
+                  borderRadius: '9999px',
+                  fontWeight: '500',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(to right, #ec4899, #a855f7)';
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(to right, #db2777, #9333ea)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                Subscribe
+              </button>
+            </form>
+            <p style={{ color: '#6b7280', fontSize: '0.75rem', marginTop: '16px' }}>
+              No spam, unsubscribe at any time. Privacy policy respected.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Article Modal */}
+      {selectedArticle && (
+        <div 
+          style={{ 
+            position: 'fixed', 
+            inset: '0', 
+            zIndex: '50', 
+            background: 'rgba(0, 0, 0, 0.9)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            padding: '16px', 
+            overflowY: 'auto' 
+          }} 
+          onClick={() => setSelectedArticle(null)}
+        >
+          <div 
+            style={{ 
+              position: 'relative', 
+              maxWidth: '896px', 
+              width: '100%', 
+              background: 'rgb(17, 24, 39)', 
+              borderRadius: '12px', 
+              border: '1px solid rgb(31, 41, 55)', 
+              margin: '32px 0' 
+            }} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setSelectedArticle(null)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                zIndex: '10',
+                color: '#9ca3af',
+                background: 'rgba(0, 0, 0, 0.5)',
+                padding: '8px',
+                borderRadius: '9999px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'color 0.3s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+              onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
+            >
+              <X size={24} />
+            </button>
             
-            {/* Category Filter */}
-            <div className="flex items-center gap-2 bg-gray-900/50 rounded-lg p-1">
-              <Tag className="text-gray-400 ml-2" size={16} />
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    selectedCategory === category
-                      ? 'bg-pink-500 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {categoryLabels[category]}
-                </button>
-              ))}
+            <div style={{ aspectRatio: '16/9', overflow: 'hidden', borderRadius: '12px 12px 0 0' }}>
+              <img 
+                src={selectedArticle.image} 
+                alt={selectedArticle.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
+              />
+            </div>
+            
+            <div style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', flexWrap: 'wrap' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  color: '#f9a8d4',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  background: 'rgba(236, 72, 153, 0.1)',
+                  padding: '4px 12px',
+                  borderRadius: '9999px'
+                }}>
+                  <Music size={14} />
+                  Music Release
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#9ca3af', fontSize: '0.875rem' }}>
+                  <Calendar size={14} />
+                  {formatDate(selectedArticle.date)}
+                </div>
+              </div>
+              
+              <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: 'white', marginBottom: '24px' }}>
+                {selectedArticle.title}
+              </h2>
+              <div>
+                <p style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: '1.75', marginBottom: '24px' }}>
+                  {selectedArticle.excerpt}
+                </p>
+                <div style={{ color: '#d1d5db', lineHeight: '1.75' }}>
+                  <p style={{ marginBottom: '16px' }}>
+                    This latest release from Hāịlō represents a significant evolution in their artistic journey, 
+                    blending the signature dark atmospheric sound with more vibrant electronic elements that 
+                    reflect their advocacy for social change and personal empowerment.
+                  </p>
+                  <p style={{ marginBottom: '16px' }}>
+                    The track explores themes of digital connection in an increasingly isolated world, 
+                    questioning how technology both unites and divides us. Through haunting vocals and 
+                    pulsing synths, the song creates a sonic landscape that mirrors the neon-lit dreams 
+                    of a generation caught between virtual and physical reality.
+                  </p>
+                  <p style={{ marginBottom: '16px' }}>
+                    Recording took place over several months, with Hāịlō collaborating with producers 
+                    who share their commitment to both musical excellence and social consciousness. 
+                    The result is a track that doesn't just entertain, but challenges listeners to 
+                    examine their own relationship with technology and human connection.
+                  </p>
+                  <p>
+                    This release coincides with Hāịlō's expanded advocacy work, with proceeds from 
+                    streaming and downloads supporting organizations focused on digital literacy 
+                    and mental health support for young people navigating online spaces.
+                  </p>
+                </div>
+              </div>
+              
+              <div style={{ 
+                marginTop: '32px', 
+                paddingTop: '24px', 
+                borderTop: '1px solid rgb(31, 41, 55)' 
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '16px'
+                }}>
+                  <div style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+                    Share this article to support advocacy work
+                  </div>
+                  <button 
+                    onClick={() => setSelectedArticle(null)}
+                    style={{
+                      color: '#f9a8d4',
+                      fontWeight: '500',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'color 0.3s'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.color = '#fbcfe8'}
+                    onMouseOut={(e) => e.currentTarget.style.color = '#f9a8d4'}
+                  >
+                    Close Article
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredArticles.map((article) => (
-              <article key={article.id} className="group cursor-pointer bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300">
-                <div className="aspect-video overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
-                  <img 
-                    src={article.image} 
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${categoryColors[article.category]}`}>
-                      {categoryLabels[article.category]}
-                    </span>
-                    <span className="text-xs text-gray-500">{article.readTime}</span>
-                  </div>
-                  
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-pink-300 transition-colors duration-300 line-clamp-2">
-                    {article.title}
-                  </h3>
-                  
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">
-                    {article.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
-                      <Calendar size={12} />
-                      {formatDate(article.date)}
-                    </span>
-                    <span className="text-pink-400 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all duration-300">
-                      Read More
-                      <ArrowRight size={14} />
-                    </span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
-      </section>
+      )}
     </div>
   );
 };
