@@ -1,5 +1,4 @@
 import React from 'react';
-import { Award, Target, Heart } from 'lucide-react';
 
 const About = () => {
   const qualifications = [
@@ -17,33 +16,90 @@ const About = () => {
     "Create safe spaces for trans and non-binary artists in the music industry"
   ];
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1024px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
+  const sectionStyle = {
+    padding: '64px 0'
+  };
+
+  const sectionAltStyle = {
+    padding: '64px 0',
+    background: 'rgba(3, 7, 18, 0.5)'
+  };
+
+  const cardStyle = {
+    background: 'rgba(17, 24, 39, 0.3)',
+    border: '1px solid rgba(55, 65, 81, 1)',
+    borderRadius: '12px',
+    padding: '24px',
+    marginBottom: '24px'
+  };
+
+  const iconStyle = {
+    fontSize: '3rem',
+    marginBottom: '16px'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            About <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Hāịlō</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            fontWeight: 'bold', 
+            marginBottom: '24px' 
+          }}>
+            About <span style={gradientTextStyle}>Hāịlō</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            maxWidth: '48rem',
+            margin: '0 auto'
+          }}>
             More than music – it's a movement for change
           </p>
         </div>
       </section>
 
       {/* Main Bio */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg prose-invert max-w-none">
-            <p className="text-xl text-gray-300 leading-relaxed mb-8">
+      <section style={sectionStyle}>
+        <div style={containerStyle}>
+          <div style={{ fontSize: '1.125rem', lineHeight: '1.8' }}>
+            <p style={{ color: '#d1d5db', marginBottom: '32px' }}>
               Hāịlō creates emotionally charged music that explores the depths of human experience while advocating for marginalized communities. Through haunting melodies and powerful lyrics, this artist bridges the gap between personal expression and social consciousness.
             </p>
             
-            <p className="text-lg text-gray-400 leading-relaxed mb-8">
+            <p style={{ color: '#9ca3af', marginBottom: '32px' }}>
               Born from a desire to make music that matters, Hāịlō combines dark, atmospheric soundscapes with messages of hope and resilience. Each track is crafted not just to entertain, but to inspire change, foster understanding, and provide comfort to those who need it most.
             </p>
 
-            <p className="text-lg text-gray-400 leading-relaxed">
+            <p style={{ color: '#9ca3af' }}>
               The artistic vision extends beyond traditional boundaries, encompassing music production, sound design, visual arts, and community advocacy. Every project serves a dual purpose: artistic expression and social impact.
             </p>
           </div>
@@ -51,19 +107,34 @@ const About = () => {
       </section>
 
       {/* Qualifications */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Award className="mx-auto mb-4 text-pink-500" size={48} />
-            <h2 className="text-3xl font-bold text-white mb-4">Qualifications & Training</h2>
-            <p className="text-gray-400">Professional background supporting the artistic mission</p>
+      <section style={sectionAltStyle}>
+        <div style={{ ...containerStyle, maxWidth: '1280px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{ ...iconStyle, color: '#ec4899' }}>🎓</div>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>
+              Qualifications & Training
+            </h2>
+            <p style={{ color: '#9ca3af' }}>Professional background supporting the artistic mission</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '24px' 
+          }}>
             {qualifications.map((qualification, index) => (
-              <div key={index} className="flex items-start gap-3 p-6 bg-gray-900/30 rounded-xl border border-gray-800">
-                <div className="w-2 h-2 bg-pink-500 rounded-full mt-3 flex-shrink-0"></div>
-                <p className="text-gray-300">{qualification}</p>
+              <div key={index} style={cardStyle}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <div style={{ 
+                    width: '8px', 
+                    height: '8px', 
+                    backgroundColor: '#ec4899', 
+                    borderRadius: '50%', 
+                    marginTop: '12px',
+                    flexShrink: 0
+                  }}></div>
+                  <p style={{ color: '#d1d5db', margin: 0 }}>{qualification}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -71,21 +142,43 @@ const About = () => {
       </section>
 
       {/* Goals */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Target className="mx-auto mb-4 text-purple-500" size={48} />
-            <h2 className="text-3xl font-bold text-white mb-4">Mission & Goals</h2>
-            <p className="text-gray-400">Working towards a more inclusive and understanding world</p>
+      <section style={sectionStyle}>
+        <div style={{ ...containerStyle, maxWidth: '1280px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <div style={{ ...iconStyle, color: '#8b5cf6' }}>🎯</div>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>
+              Mission & Goals
+            </h2>
+            <p style={{ color: '#9ca3af' }}>Working towards a more inclusive and understanding world</p>
           </div>
 
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {goals.map((goal, index) => (
-              <div key={index} className="flex items-start gap-4 p-6 bg-gradient-to-r from-gray-900/30 to-gray-800/30 rounded-xl border border-gray-700 hover:border-pink-500/50 transition-all duration-300">
-                <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-bold text-sm">{index + 1}</span>
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '16px',
+                padding: '24px',
+                background: 'linear-gradient(135deg, rgba(17, 24, 39, 0.3), rgba(55, 65, 81, 0.3))',
+                borderRadius: '12px',
+                border: '1px solid rgba(75, 85, 99, 1)',
+                transition: 'all 0.3s ease'
+              }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <span style={{ color: 'white', fontWeight: 'bold', fontSize: '0.875rem' }}>
+                    {index + 1}
+                  </span>
                 </div>
-                <p className="text-gray-300 text-lg">{goal}</p>
+                <p style={{ color: '#d1d5db', fontSize: '1.125rem', margin: 0 }}>{goal}</p>
               </div>
             ))}
           </div>
@@ -93,29 +186,43 @@ const About = () => {
       </section>
 
       {/* Values */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Heart className="mx-auto mb-6 text-pink-500" size={48} />
-          <h2 className="text-3xl font-bold text-white mb-8">Core Values</h2>
+      <section style={sectionAltStyle}>
+        <div style={containerStyle}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <div style={{ ...iconStyle, color: '#ec4899' }}>♥</div>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: 'white', marginBottom: '32px' }}>
+              Core Values
+            </h2>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-pink-400 mb-4">Authenticity</h3>
-              <p className="text-gray-400">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '32px' 
+          }}>
+            <div style={{ padding: '24px', textAlign: 'center' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#ec4899', marginBottom: '16px' }}>
+                Authenticity
+              </h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
                 Every piece of music comes from genuine experience and emotion, never manufactured or artificial.
               </p>
             </div>
             
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-purple-400 mb-4">Advocacy</h3>
-              <p className="text-gray-400">
+            <div style={{ padding: '24px', textAlign: 'center' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#8b5cf6', marginBottom: '16px' }}>
+                Advocacy
+              </h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
                 Using platform and voice to amplify marginalized communities and support meaningful causes.
               </p>
             </div>
             
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-cyan-400 mb-4">Connection</h3>
-              <p className="text-gray-400">
+            <div style={{ padding: '24px', textAlign: 'center' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#06b6d4', marginBottom: '16px' }}>
+                Connection
+              </h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
                 Creating bridges between people through shared experiences and universal emotions.
               </p>
             </div>
