@@ -1,204 +1,340 @@
-1|from fastapi import FastAPI, APIRouter, HTTPException, File, UploadFile
-2|from fastapi.staticfiles import StaticFiles
-3|from dotenv import load_dotenv
-4|from starlette.middleware.cors import CORSMiddleware
-5|import os
-6|import logging
-7|from pathlib import Path
-8|from typing import List, Optional
-9|import aiofiles
-10|import uuid
-11|from models import *
-12|from database import db
-13|
-14|ROOT_DIR = Path(__file__).parent
-15|load_dotenv(ROOT_DIR / '.env')
-16|
-17|# Create the main app
-18|app = FastAPI(title="Hāįlō Music Website API", version="1.0.0")
-19|
-20|# Create routers
-21|api_router = APIRouter(prefix="/api")
-22|admin_router = APIRouter(prefix="/api/admin")
-23|
-24|# Create uploads directory
-25|uploads_dir = ROOT_DIR / "uploads"
-26|uploads_dir.mkdir(exist_ok=True)
-27|
-28|# Serve uploaded files
-29|app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
-30|
-31|# ============================================================================
-32|# PUBLIC API ENDPOINTS (for frontend)
-33|# ============================================================================
-34|
-35|@api_router.get("/")
-36|async def root():
-37|    return {"message": "Hāịlō Music Website API", "version": "1.0.0"}
-38|
-39|@api_router.get("/artist-info", response_model=Optional[ArtistInfo])
-40|async def get_artist_info():
-41|    """Get artist information"""
-42|    return await db.get_artist_info()
-43|
-44|@api_router.get("/music", response_model=List[MusicTrack])
-45|async def get_music_tracks(platform: Optional[str] = None):
-46|    """Get music tracks with optional platform filter"""
-47|    return await db.get_music_tracks(platform)
-48|
-49|@api_router.get("/videos", response_model=List[Video])
-50|async def get_videos(type: Optional[str] = None):
-51|    """Get videos with optional type filter"""
-52|    return await db.get_videos(type)
-53|
-54|@api_router.get("/artwork", response_model=List[Artwork])
-55|async def get_artwork():
-56|    """Get all artwork"""
-57|    return await db.get_artwork()
-58|
-59|@api_router.get("/merchandise", response_model=List[Merchandise])
-60|async def get_merchandise(type: Optional[str] = None):
-61|    """Get merchandise with optional type filter"""
-62|    return await db.get_merchandise(type)
-63|
-64|@api_router.get("/charities", response_model=List[Charity])
-65|async def get_charities():
-66|    """Get all supported charities"""
-67|    return await db.get_charities()
-68|
-69|@api_router.get("/news", response_model=List[NewsArticle])
-70|async def get_news_articles():
-71|    """Get all published news articles"""
-72|    return await db.get_news_articles(published_only=True)
-73|
-74|@api_router.post("/contact", response_model=ContactMessage)
-75|async def submit_contact_form(message_data: ContactMessageCreate):
-76|    """Submit contact form"""
-77|    return await db.create_contact_message(message_data)
-78|
-79|@api_router.get("/settings", response_model=SiteSettings)
-80|async def get_site_settings():
-81|    """Get site settings"""
-82|    return await db.get_site_settings()
-83|
-84|# ============================================================================
-85|# ADMIN API ENDPOINTS (for content management)
-86|# ============================================================================
-87|
-88|# Artist Info Management
-89|@admin_router.put("/artist-info", response_model=ArtistInfo)
-90|async def update_artist_info(artist_data: ArtistInfoUpdate):
-91|    """Update artist information"""
-92|    return await db.update_artist_info(artist_data)
-93|
-94|# Music Track Management
-95|@admin_router.get("/music", response_model=List[MusicTrack])
-96|async def admin_get_music_tracks():
-97|    """Get all music tracks (admin view)"""
-98|    return await db.get_music_tracks()
-99|
-100|@admin_router.post("/music", response_model=MusicTrack)
-### **File: `backend/server.py` (Continued - lines 100-200)**
-Action: file_editor view /app/backend/server.py
-Observation: /app/backend/server.py:
-100|@admin_router.post("/music", response_model=MusicTrack)
-101|async def create_music_track(track_data: MusicTrackCreate):
-102|    """Create new music track"""
-103|    return await db.create_music_track(track_data)
-104|
-105|@admin_router.put("/music/{track_id}", response_model=MusicTrack)
-106|async def update_music_track(track_id: str, track_data: MusicTrackUpdate):
-107|    """Update music track"""
-108|    track = await db.update_music_track(track_id, track_data)
-109|    if not track:
-110|        raise HTTPException(status_code=404, detail="Track not found")
-111|    return track
-112|
-113|@admin_router.delete("/music/{track_id}")
-114|async def delete_music_track(track_id: str):
-115|    """Delete music track"""
-116|    success = await db.delete_music_track(track_id)
-117|    if not success:
-118|        raise HTTPException(status_code=404, detail="Track not found")
-119|    return {"message": "Track deleted successfully"}
-120|
-121|# Video Management
-122|@admin_router.get("/videos", response_model=List[Video])
-123|async def admin_get_videos():
-124|    """Get all videos (admin view)"""
-125|    return await db.get_videos()
-126|
-127|@admin_router.post("/videos", response_model=Video)
-128|async def create_video(video_data: VideoCreate):
-129|    """Create new video"""
-130|    return await db.create_video(video_data)
-131|
-132|@admin_router.put("/videos/{video_id}", response_model=Video)
-133|async def update_video(video_id: str, video_data: VideoUpdate):
-134|    """Update video"""
-135|    video = await db.update_video(video_id, video_data)
-136|    if not video:
-137|        raise HTTPException(status_code=404, detail="Video not found")
-138|    return video
-139|
-140|@admin_router.delete("/videos/{video_id}")
-141|async def delete_video(video_id: str):
-142|    """Delete video"""
-143|    success = await db.delete_video(video_id)
-144|    if not success:
-145|        raise HTTPException(status_code=404, detail="Video not found")
-146|    return {"message": "Video deleted successfully"}
-147|
-148|# Artwork Management
-149|@admin_router.get("/artwork", response_model=List[Artwork])
-150|async def admin_get_artwork():
-151|    """Get all artwork (admin view)"""
-152|    return await db.get_artwork()
-153|
-154|@admin_router.post("/artwork", response_model=Artwork)
-155|async def create_artwork(artwork_data: ArtworkCreate):
-156|    """Create new artwork"""
-157|    return await db.create_artwork(artwork_data)
-158|
-159|@admin_router.put("/artwork/{artwork_id}", response_model=Artwork)
-160|async def update_artwork(artwork_id: str, artwork_data: ArtworkUpdate):
-161|    """Update artwork"""
-162|    artwork = await db.update_artwork(artwork_id, artwork_data)
-163|    if not artwork:
-164|        raise HTTPException(status_code=404, detail="Artwork not found")
-165|    return artwork
-166|
-167|@admin_router.delete("/artwork/{artwork_id}")
-168|async def delete_artwork(artwork_id: str):
-169|    """Delete artwork"""
-170|    success = await db.delete_artwork(artwork_id)
-171|    if not success:
-172|        raise HTTPException(status_code=404, detail="Artwork not found")
-173|    return {"message": "Artwork deleted successfully"}
-174|
-175|# Merchandise Management
-176|@admin_router.get("/merchandise", response_model=List[Merchandise])
-177|async def admin_get_merchandise():
-178|    """Get all merchandise (admin view)"""
-179|    return await db.get_merchandise()
-180|
-181|@admin_router.post("/merchandise", response_model=Merchandise)
-182|async def create_merchandise(merch_data: MerchandiseCreate):
-183|    """Create new merchandise"""
-184|    return await db.create_merchandise(merch_data)
-185|
-186|@admin_router.put("/merchandise/{merch_id}", response_model=Merchandise)
-187|async def update_merchandise(merch_id: str, merch_data: MerchandiseUpdate):
-188|    """Update merchandise"""
-189|    merch = await db.update_merchandise(merch_id, merch_data)
-190|    if not merch:
-191|        raise HTTPException(status_code=404, detail="Merchandise not found")
-192|    return merch
-193|
-194|@admin_router.delete("/merchandise/{merch_id}")
-195|async def delete_merchandise(merch_id: str):
-196|    """Delete merchandise"""
-197|    success = await db.delete_merchandise(merch_id)
-198|    if not success:
-199|        raise HTTPException(status_code=404, detail="Merchandise not found")
-200|    return {"message": "Merchandise deleted successfully"}
+from fastapi import FastAPI, APIRouter, HTTPException, File, UploadFile
+from fastapi.staticfiles import StaticFiles
+from dotenv import load_dotenv
+from starlette.middleware.cors import CORSMiddleware
+import os
+import logging
+from pathlib import Path
+from typing import List, Optional
+import aiofiles
+import uuid
+from models import *
+from database import db
+
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+# Create the main app
+app = FastAPI(title="Hāịlō Music Website API", version="1.0.0")
+
+# Create routers
+api_router = APIRouter(prefix="/api")
+admin_router = APIRouter(prefix="/api/admin")
+
+# Create uploads directory
+uploads_dir = ROOT_DIR / "uploads"
+uploads_dir.mkdir(exist_ok=True)
+
+# Serve uploaded files
+app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
+
+# ============================================================================
+# PUBLIC API ENDPOINTS (for frontend)
+# ============================================================================
+
+@api_router.get("/")
+async def root():
+    return {"message": "Hāịlō Music Website API", "version": "1.0.0"}
+
+@api_router.get("/artist-info", response_model=Optional[ArtistInfo])
+async def get_artist_info():
+    """Get artist information"""
+    return await db.get_artist_info()
+
+@api_router.get("/music", response_model=List[MusicTrack])
+async def get_music_tracks(platform: Optional[str] = None):
+    """Get music tracks with optional platform filter"""
+    return await db.get_music_tracks(platform)
+
+@api_router.get("/videos", response_model=List[Video])
+async def get_videos(type: Optional[str] = None):
+    """Get videos with optional type filter"""
+    return await db.get_videos(type)
+
+@api_router.get("/artwork", response_model=List[Artwork])
+async def get_artwork():
+    """Get all artwork"""
+    return await db.get_artwork()
+
+@api_router.get("/merchandise", response_model=List[Merchandise])
+async def get_merchandise(type: Optional[str] = None):
+    """Get merchandise with optional type filter"""
+    return await db.get_merchandise(type)
+
+@api_router.get("/charities", response_model=List[Charity])
+async def get_charities():
+    """Get all supported charities"""
+    return await db.get_charities()
+
+@api_router.get("/news", response_model=List[NewsArticle])
+async def get_news_articles():
+    """Get all published news articles"""
+    return await db.get_news_articles(published_only=True)
+
+@api_router.post("/contact", response_model=ContactMessage)
+async def submit_contact_form(message_data: ContactMessageCreate):
+    """Submit contact form"""
+    return await db.create_contact_message(message_data)
+
+@api_router.get("/settings", response_model=SiteSettings)
+async def get_site_settings():
+    """Get site settings"""
+    return await db.get_site_settings()
+
+# ============================================================================
+# ADMIN API ENDPOINTS (for content management)
+# ============================================================================
+
+# Artist Info Management
+@admin_router.put("/artist-info", response_model=ArtistInfo)
+async def update_artist_info(artist_data: ArtistInfoUpdate):
+    """Update artist information"""
+    return await db.update_artist_info(artist_data)
+
+# Music Track Management
+@admin_router.get("/music", response_model=List[MusicTrack])
+async def admin_get_music_tracks():
+    """Get all music tracks (admin view)"""
+    return await db.get_music_tracks()
+
+@admin_router.post("/music", response_model=MusicTrack)
+async def create_music_track(track_data: MusicTrackCreate):
+    """Create new music track"""
+    return await db.create_music_track(track_data)
+
+@admin_router.put("/music/{track_id}", response_model=MusicTrack)
+async def update_music_track(track_id: str, track_data: MusicTrackUpdate):
+    """Update music track"""
+    track = await db.update_music_track(track_id, track_data)
+    if not track:
+        raise HTTPException(status_code=404, detail="Track not found")
+    return track
+
+@admin_router.delete("/music/{track_id}")
+async def delete_music_track(track_id: str):
+    """Delete music track"""
+    success = await db.delete_music_track(track_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Track not found")
+    return {"message": "Track deleted successfully"}
+
+# Video Management
+@admin_router.get("/videos", response_model=List[Video])
+async def admin_get_videos():
+    """Get all videos (admin view)"""
+    return await db.get_videos()
+
+@admin_router.post("/videos", response_model=Video)
+async def create_video(video_data: VideoCreate):
+    """Create new video"""
+    return await db.create_video(video_data)
+
+@admin_router.put("/videos/{video_id}", response_model=Video)
+async def update_video(video_id: str, video_data: VideoUpdate):
+    """Update video"""
+    video = await db.update_video(video_id, video_data)
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    return video
+
+@admin_router.delete("/videos/{video_id}")
+async def delete_video(video_id: str):
+    """Delete video"""
+    success = await db.delete_video(video_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Video not found")
+    return {"message": "Video deleted successfully"}
+
+# Artwork Management
+@admin_router.get("/artwork", response_model=List[Artwork])
+async def admin_get_artwork():
+    """Get all artwork (admin view)"""
+    return await db.get_artwork()
+
+@admin_router.post("/artwork", response_model=Artwork)
+async def create_artwork(artwork_data: ArtworkCreate):
+    """Create new artwork"""
+    return await db.create_artwork(artwork_data)
+
+@admin_router.put("/artwork/{artwork_id}", response_model=Artwork)
+async def update_artwork(artwork_id: str, artwork_data: ArtworkUpdate):
+    """Update artwork"""
+    artwork = await db.update_artwork(artwork_id, artwork_data)
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+    return artwork
+
+@admin_router.delete("/artwork/{artwork_id}")
+async def delete_artwork(artwork_id: str):
+    """Delete artwork"""
+    success = await db.delete_artwork(artwork_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+    return {"message": "Artwork deleted successfully"}
+
+# Merchandise Management
+@admin_router.get("/merchandise", response_model=List[Merchandise])
+async def admin_get_merchandise():
+    """Get all merchandise (admin view)"""
+    return await db.get_merchandise()
+
+@admin_router.post("/merchandise", response_model=Merchandise)
+async def create_merchandise(merch_data: MerchandiseCreate):
+    """Create new merchandise"""
+    return await db.create_merchandise(merch_data)
+
+@admin_router.put("/merchandise/{merch_id}", response_model=Merchandise)
+async def update_merchandise(merch_id: str, merch_data: MerchandiseUpdate):
+    """Update merchandise"""
+    merch = await db.update_merchandise(merch_id, merch_data)
+    if not merch:
+        raise HTTPException(status_code=404, detail="Merchandise not found")
+    return merch
+
+@admin_router.delete("/merchandise/{merch_id}")
+async def delete_merchandise(merch_id: str):
+    """Delete merchandise"""
+    success = await db.delete_merchandise(merch_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Merchandise not found")
+    return {"message": "Merchandise deleted successfully"}
+
+# Charity Management
+@admin_router.get("/charities", response_model=List[Charity])
+async def admin_get_charities():
+    """Get all charities (admin view)"""
+    return await db.get_charities()
+
+@admin_router.post("/charities", response_model=Charity)
+async def create_charity(charity_data: CharityCreate):
+    """Create new charity"""
+    return await db.create_charity(charity_data)
+
+@admin_router.put("/charities/{charity_id}", response_model=Charity)
+async def update_charity(charity_id: str, charity_data: CharityUpdate):
+    """Update charity"""
+    charity = await db.update_charity(charity_id, charity_data)
+    if not charity:
+        raise HTTPException(status_code=404, detail="Charity not found")
+    return charity
+
+@admin_router.delete("/charities/{charity_id}")
+async def delete_charity(charity_id: str):
+    """Delete charity"""
+    success = await db.delete_charity(charity_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Charity not found")
+    return {"message": "Charity deleted successfully"}
+
+# News Article Management
+@admin_router.get("/news", response_model=List[NewsArticle])
+async def admin_get_news_articles():
+    """Get all news articles (admin view)"""
+    return await db.get_news_articles(published_only=False)
+
+@admin_router.post("/news", response_model=NewsArticle)
+async def create_news_article(article_data: NewsArticleCreate):
+    """Create new news article"""
+    return await db.create_news_article(article_data)
+
+@admin_router.put("/news/{article_id}", response_model=NewsArticle)
+async def update_news_article(article_id: str, article_data: NewsArticleUpdate):
+    """Update news article"""
+    article = await db.update_news_article(article_id, article_data)
+    if not article:
+        raise HTTPException(status_code=404, detail="Article not found")
+    return article
+
+@admin_router.delete("/news/{article_id}")
+async def delete_news_article(article_id: str):
+    """Delete news article"""
+    success = await db.delete_news_article(article_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Article not found")
+    return {"message": "Article deleted successfully"}
+
+# Contact Message Management
+@admin_router.get("/messages", response_model=List[ContactMessage])
+async def get_contact_messages():
+    """Get all contact messages"""
+    return await db.get_contact_messages()
+
+@admin_router.put("/messages/{message_id}")
+async def update_message_status(message_id: str, read: Optional[bool] = None, replied: Optional[bool] = None):
+    """Update message status"""
+    message = await db.update_contact_message(message_id, read, replied)
+    if not message:
+        raise HTTPException(status_code=404, detail="Message not found")
+    return {"message": "Status updated successfully"}
+
+@admin_router.delete("/messages/{message_id}")
+async def delete_contact_message(message_id: str):
+    """Delete contact message"""
+    success = await db.delete_contact_message(message_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Message not found")
+    return {"message": "Message deleted successfully"}
+
+# File Upload
+@admin_router.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    """Upload image or media file"""
+    # Validate file type
+    allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type")
+    
+    # Generate unique filename
+    file_extension = file.filename.split('.')[-1]
+    unique_filename = f"{uuid.uuid4()}.{file_extension}"
+    file_path = uploads_dir / unique_filename
+    
+    # Save file
+    async with aiofiles.open(file_path, 'wb') as f:
+        content = await file.read()
+        await f.write(content)
+    
+    # Return file URL
+    file_url = f"/uploads/{unique_filename}"
+    return {"url": file_url, "filename": unique_filename}
+
+# Site Settings Management
+@admin_router.get("/settings", response_model=SiteSettings)
+async def admin_get_site_settings():
+    """Get site settings (admin view)"""
+    return await db.get_site_settings()
+
+@admin_router.put("/settings", response_model=SiteSettings)
+async def update_site_settings(settings_data: SiteSettingsUpdate):
+    """Update site settings"""
+    return await db.update_site_settings(settings_data)
+
+# Include routers in the main app
+app.include_router(api_router)
+app.include_router(admin_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+@app.on_event("startup")
+async def startup_db():
+    """Initialize database connection"""
+    await db.connect()
+    logger.info("Database connected and API ready")
+
+@app.on_event("shutdown")
+async def shutdown_db():
+    """Close database connection"""
+    await db.close()
