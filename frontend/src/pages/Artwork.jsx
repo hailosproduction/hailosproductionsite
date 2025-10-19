@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ZoomIn, ExternalLink } from 'lucide-react';
 
 const Artwork = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -81,43 +80,128 @@ const Artwork = () => {
 
   const featuredArtworks = artworks.filter(artwork => artwork.featured);
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
+  const sectionStyle = {
+    padding: '64px 0'
+  };
+
+  const sectionAltStyle = {
+    padding: '64px 0',
+    background: 'rgba(3, 7, 18, 0.5)'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Artwork</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            fontWeight: 'bold', 
+            marginBottom: '24px' 
+          }}>
+            <span style={gradientTextStyle}>Artwork</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            maxWidth: '48rem',
+            margin: '0 auto'
+          }}>
             Visual expressions of advocacy, identity, and emotional depth
           </p>
         </div>
       </section>
 
       {/* Featured Artwork */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Featured <span className="text-pink-500">Pieces</span>
+      <section style={sectionStyle}>
+        <div style={containerStyle}>
+          <h2 style={{ 
+            fontSize: '2.25rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '32px', 
+            textAlign: 'center' 
+          }}>
+            Featured <span style={{ color: '#ec4899' }}>Pieces</span>
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '32px',
+            marginBottom: '64px'
+          }}>
             {featuredArtworks.map((artwork) => (
-              <div key={artwork.id} className="group cursor-pointer" onClick={() => setSelectedImage(artwork)}>
-                <div className="aspect-[4/5] rounded-xl overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20 mb-4">
+              <div 
+                key={artwork.id} 
+                style={{ cursor: 'pointer' }}
+                onClick={() => setSelectedImage(artwork)}
+              >
+                <div style={{
+                  aspectRatio: '4/5',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                  marginBottom: '16px',
+                  position: 'relative'
+                }}>
                   <img 
                     src={artwork.image} 
                     alt={artwork.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                    <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" size={32} />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0, 0, 0, 0)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'background-color 0.3s ease'
+                  }} className="zoom-overlay">
+                    <span style={{ 
+                      color: 'white', 
+                      fontSize: '2rem',
+                      opacity: 0,
+                      transition: 'opacity 0.3s ease'
+                    }} className="zoom-icon">🔍</span>
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-1">{artwork.title}</h3>
-                <p className="text-pink-400 text-sm mb-2">{artwork.medium} • {artwork.year}</p>
-                <p className="text-gray-400 text-sm">{artwork.description}</p>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'white', marginBottom: '4px' }}>
+                  {artwork.title}
+                </h3>
+                <p style={{ color: '#ec4899', fontSize: '0.875rem', marginBottom: '8px' }}>
+                  {artwork.medium} • {artwork.year}
+                </p>
+                <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+                  {artwork.description}
+                </p>
               </div>
             ))}
           </div>
@@ -125,30 +209,74 @@ const Artwork = () => {
       </section>
 
       {/* Gallery Grid */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Gallery <span className="text-pink-500">Collection</span>
+      <section style={sectionAltStyle}>
+        <div style={containerStyle}>
+          <h2 style={{ 
+            fontSize: '2.25rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '32px', 
+            textAlign: 'center' 
+          }}>
+            Gallery <span style={{ color: '#ec4899' }}>Collection</span>
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '24px' 
+          }}>
             {artworks.map((artwork) => (
               <div 
                 key={artwork.id} 
-                className="group cursor-pointer bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300"
+                style={{
+                  cursor: 'pointer',
+                  background: 'rgba(17, 24, 39, 0.3)',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '1px solid rgba(55, 65, 81, 1)',
+                  transition: 'all 0.3s ease'
+                }}
                 onClick={() => setSelectedImage(artwork)}
               >
-                <div className="aspect-square overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+                <div style={{
+                  aspectRatio: '1',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))'
+                }}>
                   <img 
                     src={artwork.image} 
                     alt={artwork.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                    className="gallery-image"
                   />
                 </div>
-                <div className="p-4">
-                  <h3 className="text-white font-semibold mb-1 line-clamp-1">{artwork.title}</h3>
-                  <p className="text-pink-400 text-xs mb-2">{artwork.medium}</p>
-                  <p className="text-gray-400 text-xs line-clamp-2">{artwork.description}</p>
+                <div style={{ padding: '16px' }}>
+                  <h3 style={{ 
+                    color: 'white', 
+                    fontWeight: '600', 
+                    marginBottom: '4px',
+                    fontSize: '1rem',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {artwork.title}
+                  </h3>
+                  <p style={{ color: '#ec4899', fontSize: '0.75rem', marginBottom: '8px' }}>
+                    {artwork.medium}
+                  </p>
+                  <p style={{ 
+                    color: '#9ca3af', 
+                    fontSize: '0.75rem',
+                    lineHeight: '1.4',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
+                  }}>
+                    {artwork.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -159,31 +287,82 @@ const Artwork = () => {
       {/* Lightbox Modal */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 50,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px'
+          }}
           onClick={() => setSelectedImage(null)}
         >
-          <div className="max-w-4xl mx-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="relative">
+          <div 
+            style={{ maxWidth: '1024px', width: '100%' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ position: 'relative' }}>
               <img 
                 src={selectedImage.image} 
                 alt={selectedImage.title}
-                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                style={{ 
+                  width: '100%', 
+                  maxHeight: '80vh', 
+                  objectFit: 'contain', 
+                  borderRadius: '8px' 
+                }}
               />
               <button 
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white transition-colors duration-300"
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  right: '16px',
+                  width: '40px',
+                  height: '40px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s ease'
+                }}
               >
                 ×
               </button>
             </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-2xl font-bold text-white mb-2">{selectedImage.title}</h3>
-              <p className="text-pink-400 mb-2">{selectedImage.medium} • {selectedImage.year}</p>
-              <p className="text-gray-300 max-w-2xl mx-auto">{selectedImage.description}</p>
+            <div style={{ marginTop: '24px', textAlign: 'center' }}>
+              <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>
+                {selectedImage.title}
+              </h3>
+              <p style={{ color: '#ec4899', marginBottom: '8px' }}>
+                {selectedImage.medium} • {selectedImage.year}
+              </p>
+              <p style={{ color: '#d1d5db', maxWidth: '32rem', margin: '0 auto' }}>
+                {selectedImage.description}
+              </p>
             </div>
           </div>
         </div>
       )}
+
+      <style>{`
+        .zoom-overlay:hover {
+          background-color: rgba(0, 0, 0, 0.4) !important;
+        }
+        .zoom-overlay:hover .zoom-icon {
+          opacity: 1 !important;
+        }
+        .gallery-image:hover {
+          transform: scale(1.1) !important;
+        }
+      `}</style>
     </div>
   );
 };
