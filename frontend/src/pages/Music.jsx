@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Play, ExternalLink, Filter } from 'lucide-react';
 
 const Music = () => {
   const [selectedPlatform, setSelectedPlatform] = useState('all');
@@ -75,47 +74,152 @@ const Music = () => {
 
   const featuredTracks = musicTracks.filter(track => track.featured);
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
+  const sectionStyle = {
+    padding: '64px 0'
+  };
+
+  const sectionAltStyle = {
+    padding: '64px 0',
+    background: 'rgba(3, 7, 18, 0.5)'
+  };
+
+  const cardStyle = {
+    background: 'rgba(17, 24, 39, 0.3)',
+    border: '1px solid rgba(55, 65, 81, 1)',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    transition: 'all 0.3s ease'
+  };
+
+  const filterStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    background: 'rgba(17, 24, 39, 0.5)',
+    borderRadius: '8px',
+    padding: '4px'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Music</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            fontWeight: 'bold', 
+            marginBottom: '24px' 
+          }}>
+            <span style={gradientTextStyle}>Music</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            maxWidth: '48rem',
+            margin: '0 auto'
+          }}>
             Dark melodies with purpose – every track tells a story of struggle, hope, and change
           </p>
         </div>
       </section>
 
       {/* Featured Tracks */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Featured <span className="text-pink-500">Tracks</span>
+      <section style={sectionStyle}>
+        <div style={containerStyle}>
+          <h2 style={{ 
+            fontSize: '2.25rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '32px', 
+            textAlign: 'center' 
+          }}>
+            Featured <span style={{ color: '#ec4899' }}>Tracks</span>
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '32px',
+            marginBottom: '64px'
+          }}>
             {featuredTracks.map((track) => (
-              <div key={track.id} className="group relative">
-                <div className="aspect-square rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-pink-500/20 to-purple-500/20">
-                  <img 
-                    src={track.coverArt} 
-                    alt={track.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center hover:bg-pink-400 transition-colors duration-300">
-                      <Play className="text-white ml-1" size={24} />
-                    </button>
+              <div key={track.id} style={{ position: 'relative' }}>
+                <div style={cardStyle}>
+                  <div style={{ 
+                    aspectRatio: '1', 
+                    background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}>
+                    <img 
+                      src={track.coverArt} 
+                      alt={track.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0,
+                      transition: 'opacity 0.3s ease'
+                    }} className="play-overlay">
+                      <button style={{
+                        width: '64px',
+                        height: '64px',
+                        backgroundColor: '#ec4899',
+                        borderRadius: '50%',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'background-color 0.3s ease'
+                      }}>
+                        <span style={{ color: 'white', fontSize: '1.5rem', marginLeft: '4px' }}>▶</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-2">{track.title}</h3>
-                <p className="text-gray-400 text-sm mb-3">{track.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-pink-400 text-sm">{track.platform}</span>
-                  <span className="text-gray-500 text-sm">{track.duration}</span>
+                  <div style={{ padding: '24px' }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'white', marginBottom: '8px' }}>
+                      {track.title}
+                    </h3>
+                    <p style={{ color: '#9ca3af', fontSize: '0.875rem', marginBottom: '12px' }}>
+                      {track.description}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#ec4899', fontSize: '0.875rem' }}>{track.platform}</span>
+                      <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>{track.duration}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -124,25 +228,42 @@ const Music = () => {
       </section>
 
       {/* All Tracks */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4 sm:mb-0">
-              All <span className="text-pink-500">Tracks</span>
+      <section style={sectionAltStyle}>
+        <div style={containerStyle}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px',
+            alignItems: 'center',
+            marginBottom: '32px'
+          }}>
+            <h2 style={{ 
+              fontSize: '2.25rem', 
+              fontWeight: 'bold', 
+              color: 'white',
+              margin: 0
+            }}>
+              All <span style={{ color: '#ec4899' }}>Tracks</span>
             </h2>
             
             {/* Platform Filter */}
-            <div className="flex items-center gap-2 bg-gray-900/50 rounded-lg p-1">
-              <Filter className="text-gray-400 ml-2" size={16} />
+            <div style={filterStyle}>
+              <span style={{ color: '#9ca3af', fontSize: '1rem', marginLeft: '8px' }}>🎵</span>
               {platforms.map((platform) => (
                 <button
                   key={platform}
                   onClick={() => setSelectedPlatform(platform)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    selectedPlatform === platform
-                      ? 'bg-pink-500 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: selectedPlatform === platform ? '#ec4899' : 'transparent',
+                    color: selectedPlatform === platform ? 'white' : '#9ca3af'
+                  }}
                 >
                   {platform === 'all' ? 'All Platforms' : platform}
                 </button>
@@ -150,40 +271,98 @@ const Music = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: '24px' 
+          }}>
             {filteredTracks.map((track) => (
-              <div key={track.id} className="bg-gray-900/30 rounded-xl p-6 border border-gray-800 hover:border-pink-500/50 transition-all duration-300 group">
-                <div className="flex gap-4">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+              <div key={track.id} style={cardStyle}>
+                <div style={{ display: 'flex', gap: '16px', padding: '24px' }}>
+                  <div style={{ 
+                    width: '64px', 
+                    height: '64px', 
+                    borderRadius: '8px', 
+                    overflow: 'hidden',
+                    background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                    flexShrink: 0
+                  }}>
                     <img 
                       src={track.coverArt} 
                       alt={track.title}
-                      className="w-full h-full object-cover"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
                   
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold mb-1 truncate">{track.title}</h3>
-                    <p className="text-gray-400 text-sm mb-2 line-clamp-2">{track.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-pink-400 text-xs">{track.platform}</span>
-                      <span className="text-gray-500 text-xs">{track.duration}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h3 style={{ 
+                      color: 'white', 
+                      fontWeight: '600', 
+                      marginBottom: '4px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}>
+                      {track.title}
+                    </h3>
+                    <p style={{ 
+                      color: '#9ca3af', 
+                      fontSize: '0.875rem', 
+                      marginBottom: '8px',
+                      lineHeight: '1.4'
+                    }}>
+                      {track.description}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#ec4899', fontSize: '0.75rem' }}>{track.platform}</span>
+                      <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>{track.duration}</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex gap-2 mt-4">
-                  <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center gap-2">
-                    <Play size={14} />
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '8px', 
+                  padding: '0 24px 24px 24px' 
+                }}>
+                  <button style={{
+                    flex: 1,
+                    backgroundColor: '#ec4899',
+                    color: 'white',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'background-color 0.3s ease'
+                  }}>
+                    <span style={{ fontSize: '0.875rem' }}>▶</span>
                     Play
                   </button>
                   <a 
                     href={track.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center"
+                    style={{
+                      backgroundColor: '#374151',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'background-color 0.3s ease'
+                    }}
                   >
-                    <ExternalLink size={14} />
+                    ↗
                   </a>
                 </div>
               </div>
@@ -191,6 +370,12 @@ const Music = () => {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .play-overlay:hover {
+          opacity: 1 !important;
+        }
+      `}</style>
     </div>
   );
 };
