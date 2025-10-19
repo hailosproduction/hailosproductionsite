@@ -1,5 +1,3 @@
-Also, let's make sure your frontend/tailwind.config.js is clean too:
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
