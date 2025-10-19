@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Play, ExternalLink, Filter } from 'lucide-react';
 
 const Videos = () => {
   const [selectedType, setSelectedType] = useState('all');
@@ -75,87 +74,286 @@ const Videos = () => {
     'live-performance': 'Live Performances'
   };
 
+  const categoryColors = {
+    'music-video': { backgroundColor: 'rgba(236, 72, 153, 0.2)', color: '#ec4899' },
+    'sound-design': { backgroundColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6' },
+    'live-performance': { backgroundColor: 'rgba(6, 182, 212, 0.2)', color: '#06b6d4' }
+  };
+
   const filteredVideos = selectedType === 'all' 
     ? videos 
     : videos.filter(video => video.type === selectedType);
 
   const featuredVideos = videos.filter(video => video.featured);
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
+  const sectionStyle = {
+    padding: '64px 0'
+  };
+
+  const sectionAltStyle = {
+    padding: '64px 0',
+    background: 'rgba(3, 7, 18, 0.5)'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Videos</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            fontWeight: 'bold', 
+            marginBottom: '24px' 
+          }}>
+            <span style={gradientTextStyle}>Videos</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            maxWidth: '48rem',
+            margin: '0 auto'
+          }}>
             Visual storytelling through music videos, sound design reels, and live performances
           </p>
         </div>
       </section>
 
       {/* Featured Videos */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Featured <span className="text-pink-500">Videos</span>
+      <section style={sectionStyle}>
+        <div style={containerStyle}>
+          <h2 style={{ 
+            fontSize: '2.25rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '32px', 
+            textAlign: 'center' 
+          }}>
+            Featured <span style={{ color: '#ec4899' }}>Videos</span>
           </h2>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-            {featuredVideos.map((video, index) => (
-              <div key={video.id} className={`group ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`}>
-                <div className="relative aspect-video rounded-xl overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '2fr 1fr', 
+            gap: '32px',
+            marginBottom: '64px'
+          }}>
+            {/* Large featured video */}
+            {featuredVideos[0] && (
+              <div style={{ position: 'relative' }}>
+                <div style={{
+                  aspectRatio: '16/9',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                  position: 'relative'
+                }}>
                   <img 
-                    src={video.thumbnail} 
-                    alt={video.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    src={featuredVideos[0].thumbnail} 
+                    alt={featuredVideos[0].title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button className="w-16 h-16 bg-pink-500/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-pink-500 transition-colors duration-300 group-hover:scale-110">
-                      <Play className="text-white ml-1" size={24} />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0, 0, 0, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <button style={{
+                      width: '80px',
+                      height: '80px',
+                      backgroundColor: 'rgba(236, 72, 153, 0.9)',
+                      borderRadius: '50%',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer'
+                    }}>
+                      <span style={{ color: 'white', fontSize: '2rem', marginLeft: '4px' }}>▶</span>
                     </button>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className={`font-semibold text-white mb-2 ${index === 0 ? 'text-2xl' : 'text-lg'}`}>
-                      {video.title}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '16px',
+                    left: '16px',
+                    right: '16px'
+                  }}>
+                    <h3 style={{ 
+                      fontSize: '1.5rem', 
+                      fontWeight: '600', 
+                      color: 'white', 
+                      marginBottom: '8px' 
+                    }}>
+                      {featuredVideos[0].title}
                     </h3>
-                    <p className="text-gray-200 text-sm mb-2">{video.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="bg-pink-500/80 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
-                        {typeLabels[video.type]}
+                    <p style={{ color: '#e5e7eb', fontSize: '0.875rem', marginBottom: '8px' }}>
+                      {featuredVideos[0].description}
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{
+                        ...categoryColors[featuredVideos[0].type],
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: '500'
+                      }}>
+                        {typeLabels[featuredVideos[0].type]}
                       </span>
-                      <span className="text-gray-200 text-xs">{video.duration}</span>
+                      <span style={{ color: '#e5e7eb', fontSize: '0.75rem' }}>
+                        {featuredVideos[0].duration}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            )}
+
+            {/* Smaller featured videos */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {featuredVideos.slice(1, 3).map((video) => (
+                <div key={video.id} style={{
+                  aspectRatio: '16/9',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                  position: 'relative'
+                }}>
+                  <img 
+                    src={video.thumbnail} 
+                    alt={video.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <button style={{
+                      width: '48px',
+                      height: '48px',
+                      backgroundColor: 'rgba(236, 72, 153, 0.9)',
+                      borderRadius: '50%',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer'
+                    }}>
+                      <span style={{ color: 'white', fontSize: '1rem', marginLeft: '2px' }}>▶</span>
+                    </button>
+                  </div>
+                  <div style={{
+                    position: 'absolute',
+                    top: '8px',
+                    left: '8px'
+                  }}>
+                    <span style={{
+                      ...categoryColors[video.type],
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontSize: '0.625rem',
+                      fontWeight: '500'
+                    }}>
+                      {typeLabels[video.type]}
+                    </span>
+                  </div>
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '8px',
+                    right: '8px'
+                  }}>
+                    <span style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      color: 'white',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontSize: '0.625rem'
+                    }}>
+                      {video.duration}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* All Videos */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4 sm:mb-0">
-              All <span className="text-pink-500">Videos</span>
+      <section style={sectionAltStyle}>
+        <div style={containerStyle}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px',
+            alignItems: 'center',
+            marginBottom: '32px'
+          }}>
+            <h2 style={{ 
+              fontSize: '2.25rem', 
+              fontWeight: 'bold', 
+              color: 'white',
+              margin: 0
+            }}>
+              All <span style={{ color: '#ec4899' }}>Videos</span>
             </h2>
             
             {/* Type Filter */}
-            <div className="flex items-center gap-2 bg-gray-900/50 rounded-lg p-1">
-              <Filter className="text-gray-400 ml-2" size={16} />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(17, 24, 39, 0.5)',
+              borderRadius: '8px',
+              padding: '4px'
+            }}>
+              <span style={{ color: '#9ca3af', fontSize: '1rem', marginLeft: '8px' }}>📹</span>
               {videoTypes.map((type) => (
                 <button
                   key={type}
                   onClick={() => setSelectedType(type)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    selectedType === type
-                      ? 'bg-pink-500 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: selectedType === type ? '#ec4899' : 'transparent',
+                    color: selectedType === type ? 'white' : '#9ca3af'
+                  }}
                 >
                   {typeLabels[type]}
                 </button>
@@ -163,49 +361,142 @@ const Videos = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+            gap: '32px' 
+          }}>
             {filteredVideos.map((video) => (
-              <div key={video.id} className="group bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300">
-                <div className="relative aspect-video bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+              <div key={video.id} style={{
+                background: 'rgba(17, 24, 39, 0.3)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid rgba(55, 65, 81, 1)',
+                transition: 'all 0.3s ease'
+              }}>
+                <div style={{
+                  aspectRatio: '16/9',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                  position: 'relative'
+                }}>
                   <img 
                     src={video.thumbnail} 
                     alt={video.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="w-12 h-12 bg-pink-500/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-pink-500">
-                      <Play className="text-white ml-1" size={16} />
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'rgba(0, 0, 0, 0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease'
+                  }} className="play-overlay">
+                    <button style={{
+                      width: '48px',
+                      height: '48px',
+                      backgroundColor: 'rgba(236, 72, 153, 0.9)',
+                      borderRadius: '50%',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer'
+                    }}>
+                      <span style={{ color: 'white', fontSize: '1rem', marginLeft: '2px' }}>▶</span>
                     </button>
                   </div>
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-pink-500/80 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                  <div style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px'
+                  }}>
+                    <span style={{
+                      ...categoryColors[video.type],
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      fontWeight: '500'
+                    }}>
                       {typeLabels[video.type]}
                     </span>
                   </div>
-                  <div className="absolute bottom-4 right-4">
-                    <span className="bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '16px',
+                    right: '16px'
+                  }}>
+                    <span style={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      color: 'white',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem'
+                    }}>
                       {video.duration}
                     </span>
                   </div>
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-white font-semibold mb-2 line-clamp-1">{video.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{video.description}</p>
+                <div style={{ padding: '24px' }}>
+                  <h3 style={{ 
+                    color: 'white', 
+                    fontWeight: '600', 
+                    marginBottom: '8px',
+                    fontSize: '1.125rem'
+                  }}>
+                    {video.title}
+                  </h3>
+                  <p style={{ 
+                    color: '#9ca3af', 
+                    fontSize: '0.875rem', 
+                    marginBottom: '16px',
+                    lineHeight: '1.5'
+                  }}>
+                    {video.description}
+                  </p>
                   
-                  <div className="flex gap-2">
-                    <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center gap-2">
-                      <Play size={14} />
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button style={{
+                      flex: 1,
+                      backgroundColor: '#ec4899',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'background-color 0.3s ease'
+                    }}>
+                      <span>▶</span>
                       Watch
                     </button>
                     <a 
                       href={video.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center"
+                      style={{
+                        backgroundColor: '#374151',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'background-color 0.3s ease'
+                      }}
                     >
-                      <ExternalLink size={14} />
+                      ↗
                     </a>
                   </div>
                 </div>
@@ -214,6 +505,17 @@ const Videos = () => {
           </div>
         </div>
       </section>
+
+      <style>{`
+        .play-overlay:hover {
+          opacity: 1 !important;
+        }
+        @media (max-width: 768px) {
+          .featured-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
