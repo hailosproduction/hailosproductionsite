@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Music, Video, Palette, ShoppingBag, Heart, Newspaper, Mail, Plus, Edit, Trash2, Save, User } from 'lucide-react';
+import { Settings, Music, Video, Palette, ShoppingBag, Heart, Newspaper, Mail, Plus, Edit, Trash2, Save, User, X } from 'lucide-react';
+import VideoManager from '../components/VideoManager';
+import MerchManager from '../components/MerchManager';
+import CharityManager from '../components/CharityManager';
+import NewsManager from '../components/NewsManager';
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -22,6 +26,10 @@ const Admin = () => {
   });
 
   const [musicTracks, setMusicTracks] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [merchandise, setMerchandise] = useState([]);
+  const [charities, setCharities] = useState([]);
+  const [newsArticles, setNewsArticles] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
@@ -32,9 +40,13 @@ const Admin = () => {
     setLoading(true);
     try {
       const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-      const [artistResponse, musicResponse] = await Promise.all([
+      const [artistResponse, musicResponse, videosResponse, merchResponse, charitiesResponse, newsResponse] = await Promise.all([
         fetch(`${BACKEND_URL}/api/artist-info`),
-        fetch(`${BACKEND_URL}/api/music`)
+        fetch(`${BACKEND_URL}/api/music`),
+        fetch(`${BACKEND_URL}/api/videos`),
+        fetch(`${BACKEND_URL}/api/merchandise`),
+        fetch(`${BACKEND_URL}/api/charities`),
+        fetch(`${BACKEND_URL}/api/news`)
       ]);
 
       if (artistResponse.ok) {
@@ -47,6 +59,28 @@ const Admin = () => {
         setMusicTracks(musicData || []);
         setStats(prev => ({ ...prev, tracks: musicData?.length || 0 }));
       }
+
+      if (videosResponse.ok) {
+        const videosData = await videosResponse.json();
+        setVideos(videosData || []);
+        setStats(prev => ({ ...prev, videos: videosData?.length || 0 }));
+      }
+
+      if (merchResponse.ok) {
+        const merchData = await merchResponse.json();
+        setMerchandise(merchData || []);
+        setStats(prev => ({ ...prev, merchandise: merchData?.length || 0 }));
+      }
+
+      if (charitiesResponse.ok) {
+        const charitiesData = await charitiesResponse.json();
+        setCharities(charitiesData || []);
+      }
+
+      if (newsResponse.ok) {
+        const newsData = await newsResponse.json();
+        setNewsArticles(newsData || []);
+      }
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -57,12 +91,195 @@ const Admin = () => {
   const handleUpdateArtistInfo = async (updatedInfo) => {
     try {
       setLoading(true);
-      setArtistInfo(updatedInfo);
-      alert('Artist info updated successfully');
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/artist-info`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedInfo)
+      });
+      
+      if (response.ok) {
+        setArtistInfo(updatedInfo);
+        alert('Artist info updated successfully');
+      } else {
+        alert('Failed to update artist info');
+      }
     } catch (error) {
       alert('Error updating: ' + error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Video handlers
+  const handleAddVideo = async (videoData) => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/videos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(videoData)
+      });
+      
+      if (response.ok) {
+        const newVideo = await response.json();
+        setVideos([...videos, newVideo]);
+        setStats(prev => ({ ...prev, videos: prev.videos + 1 }));
+        alert('Video added successfully');
+      } else {
+        alert('Failed to add video');
+      }
+    } catch (error) {
+      alert('Error adding video: ' + error.message);
+    }
+  };
+
+  const handleDeleteVideo = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this video?')) return;
+    
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/videos/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setVideos(videos.filter(v => v.id !== id));
+        setStats(prev => ({ ...prev, videos: prev.videos - 1 }));
+        alert('Video deleted successfully');
+      } else {
+        alert('Failed to delete video');
+      }
+    } catch (error) {
+      alert('Error deleting video: ' + error.message);
+    }
+  };
+
+  // Merchandise handlers
+  const handleAddMerch = async (merchData) => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/merchandise`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(merchData)
+      });
+      
+      if (response.ok) {
+        const newMerch = await response.json();
+        setMerchandise([...merchandise, newMerch]);
+        setStats(prev => ({ ...prev, merchandise: prev.merchandise + 1 }));
+        alert('Merchandise added successfully');
+      } else {
+        alert('Failed to add merchandise');
+      }
+    } catch (error) {
+      alert('Error adding merchandise: ' + error.message);
+    }
+  };
+
+  const handleDeleteMerch = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+    
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/merchandise/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setMerchandise(merchandise.filter(m => m.id !== id));
+        setStats(prev => ({ ...prev, merchandise: prev.merchandise - 1 }));
+        alert('Merchandise deleted successfully');
+      } else {
+        alert('Failed to delete merchandise');
+      }
+    } catch (error) {
+      alert('Error deleting merchandise: ' + error.message);
+    }
+  };
+
+  // Charity handlers
+  const handleAddCharity = async (charityData) => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/charities`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(charityData)
+      });
+      
+      if (response.ok) {
+        const newCharity = await response.json();
+        setCharities([...charities, newCharity]);
+        alert('Charity added successfully');
+      } else {
+        alert('Failed to add charity');
+      }
+    } catch (error) {
+      alert('Error adding charity: ' + error.message);
+    }
+  };
+
+  const handleDeleteCharity = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this charity?')) return;
+    
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/charities/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setCharities(charities.filter(c => c.id !== id));
+        alert('Charity deleted successfully');
+      } else {
+        alert('Failed to delete charity');
+      }
+    } catch (error) {
+      alert('Error deleting charity: ' + error.message);
+    }
+  };
+
+  // News handlers
+  const handleAddNews = async (newsData) => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/news`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newsData)
+      });
+      
+      if (response.ok) {
+        const newNews = await response.json();
+        setNewsArticles([...newsArticles, newNews]);
+        alert('News article added successfully');
+      } else {
+        alert('Failed to add news');
+      }
+    } catch (error) {
+      alert('Error adding news: ' + error.message);
+    }
+  };
+
+  const handleDeleteNews = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this article?')) return;
+    
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/admin/news/${id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setNewsArticles(newsArticles.filter(n => n.id !== id));
+        alert('News article deleted successfully');
+      } else {
+        alert('Failed to delete news');
+      }
+    } catch (error) {
+      alert('Error deleting news: ' + error.message);
     }
   };
 
@@ -105,7 +322,6 @@ const Admin = () => {
               { id: 'artist', label: 'Artist Info', icon: User },
               { id: 'music', label: 'Music', icon: Music },
               { id: 'videos', label: 'Videos', icon: Video },
-              { id: 'artwork', label: 'Artwork', icon: Palette },
               { id: 'merchandise', label: 'Merch', icon: ShoppingBag },
               { id: 'charities', label: 'Charities', icon: Heart },
               { id: 'news', label: 'News', icon: Newspaper }
@@ -156,9 +372,9 @@ const Admin = () => {
               {[
                 { label: 'Music Tracks', count: stats.tracks, icon: Music, color: '#ec4899' },
                 { label: 'Videos', count: stats.videos, icon: Video, color: '#a855f7' },
-                { label: 'Artwork Pieces', count: stats.artwork, icon: Palette, color: '#06b6d4' },
                 { label: 'Merchandise', count: stats.merchandise, icon: ShoppingBag, color: '#10b981' },
-                { label: 'Messages', count: stats.messages, icon: Mail, color: '#f97316' }
+                { label: 'Charities', count: charities.length, icon: Heart, color: '#f97316' },
+                { label: 'News Articles', count: newsArticles.length, icon: Newspaper, color: '#06b6d4' }
               ].map((stat, index) => {
                 const IconComponent = stat.icon;
                 return (
@@ -196,10 +412,10 @@ const Admin = () => {
               <p style={{ color: '#9ca3af', fontSize: '0.875rem', marginBottom: '16px' }}>Common tasks to manage your website content</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                 {[
-                  { label: 'Add Music Track', section: 'music', icon: Plus, color: '#db2777' },
                   { label: 'Add Video', section: 'videos', icon: Plus, color: '#9333ea' },
-                  { label: 'Add Artwork', section: 'artwork', icon: Plus, color: '#0891b2' },
-                  { label: 'Write Article', section: 'news', icon: Plus, color: '#ea580c' }
+                  { label: 'Add Merchandise', section: 'merchandise', icon: Plus, color: '#10b981' },
+                  { label: 'Add Charity', section: 'charities', icon: Plus, color: '#ea580c' },
+                  { label: 'Write Article', section: 'news', icon: Plus, color: '#0891b2' }
                 ].map((action, index) => (
                   <button
                     key={index}
@@ -452,22 +668,40 @@ const Admin = () => {
           </div>
         )}
 
-        {/* Other sections placeholder */}
-        {['videos', 'artwork', 'merchandise', 'charities', 'news'].includes(activeSection) && (
-          <div style={{ 
-            background: 'rgb(17, 24, 39)', 
-            borderRadius: '12px', 
-            padding: '24px',
-            border: '1px solid rgb(31, 41, 55)'
-          }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>
-              {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-            </h2>
-            <p style={{ color: '#9ca3af', fontSize: '0.875rem', marginBottom: '16px' }}>
-              Manage your {activeSection} content
-            </p>
-            <p style={{ color: '#9ca3af' }}>Management interface would be implemented here...</p>
-          </div>
+        {/* Videos Tab */}
+        {activeSection === 'videos' && (
+          <VideoManager
+            videos={videos}
+            onAdd={handleAddVideo}
+            onDelete={handleDeleteVideo}
+          />
+        )}
+
+        {/* Merchandise Tab */}
+        {activeSection === 'merchandise' && (
+          <MerchManager
+            merchandise={merchandise}
+            onAdd={handleAddMerch}
+            onDelete={handleDeleteMerch}
+          />
+        )}
+
+        {/* Charities Tab */}
+        {activeSection === 'charities' && (
+          <CharityManager
+            charities={charities}
+            onAdd={handleAddCharity}
+            onDelete={handleDeleteCharity}
+          />
+        )}
+
+        {/* News Tab */}
+        {activeSection === 'news' && (
+          <NewsManager
+            newsArticles={newsArticles}
+            onAdd={handleAddNews}
+            onDelete={handleDeleteNews}
+          />
         )}
       </div>
     </div>
