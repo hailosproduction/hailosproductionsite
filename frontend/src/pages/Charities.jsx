@@ -1,5 +1,4 @@
 import React from 'react';
-import { ExternalLink, Heart, Users, Globe, Brain } from 'lucide-react';
 
 const Charities = () => {
   const charities = [
@@ -11,7 +10,7 @@ const Charities = () => {
       website: "https://autismspeaks.org",
       logo: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=200&h=200&fit=crop",
       featured: true,
-      icon: Brain,
+      icon: "🧠",
       impact: "Supported over 2 million individuals",
       color: "from-blue-500 to-cyan-500"
     },
@@ -23,7 +22,7 @@ const Charities = () => {
       website: "https://glaad.org",
       logo: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=200&h=200&fit=crop",
       featured: true,
-      icon: Heart,
+      icon: "♥",
       impact: "Advocating for 20+ million LGBTQ Americans",
       color: "from-pink-500 to-purple-500"
     },
@@ -35,7 +34,7 @@ const Charities = () => {
       website: "https://greenpeace.org",
       logo: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&h=200&fit=crop",
       featured: true,
-      icon: Globe,
+      icon: "🌍",
       impact: "Active in 50+ countries worldwide",
       color: "from-green-500 to-emerald-500"
     },
@@ -47,29 +46,78 @@ const Charities = () => {
       website: "https://mhanational.org",
       logo: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=200&h=200&fit=crop",
       featured: true,
-      icon: Users,
+      icon: "🧘",
       impact: "Helping millions access mental health resources",
       color: "from-indigo-500 to-purple-500"
     }
   ];
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
+  const colorMap = {
+    'from-blue-500 to-cyan-500': 'linear-gradient(45deg, #3b82f6, #06b6d4)',
+    'from-pink-500 to-purple-500': 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    'from-green-500 to-emerald-500': 'linear-gradient(45deg, #10b981, #059669)',
+    'from-indigo-500 to-purple-500': 'linear-gradient(45deg, #6366f1, #8b5cf6)'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Heart className="text-pink-500" size={40} />
-            <h1 className="text-4xl md:text-6xl font-bold">
-              <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Supported Causes</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+            <span style={{ color: '#ec4899', fontSize: '2.5rem' }}>♥</span>
+            <h1 style={{ 
+              fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+              fontWeight: 'bold',
+              margin: 0
+            }}>
+              <span style={gradientTextStyle}>Supported Causes</span>
             </h1>
-            <Heart className="text-pink-500" size={40} />
+            <span style={{ color: '#ec4899', fontSize: '2.5rem' }}>♥</span>
           </div>
-          <p className="text-xl text-gray-300 leading-relaxed mb-6">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            marginBottom: '24px',
+            maxWidth: '48rem',
+            margin: '0 auto 24px auto'
+          }}>
             Music with purpose – supporting organizations that create real change
           </p>
-          <div className="bg-gray-900/50 rounded-xl p-6 max-w-2xl mx-auto">
-            <p className="text-gray-300 leading-relaxed">
+          <div style={{
+            background: 'rgba(17, 24, 39, 0.5)',
+            borderRadius: '12px',
+            padding: '24px',
+            maxWidth: '32rem',
+            margin: '0 auto'
+          }}>
+            <p style={{ color: '#d1d5db', lineHeight: '1.6', margin: 0 }}>
               A portion of all music sales, merchandise proceeds, and concert ticket sales 
               goes directly to these incredible organizations. When you support Hāịlō's music, 
               you're also supporting causes that matter.
@@ -79,93 +127,182 @@ const Charities = () => {
       </section>
 
       {/* Main Charities */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {charities.map((charity) => {
-              const IconComponent = charity.icon;
-              return (
-                <div key={charity.id} className="group bg-gray-900/30 rounded-2xl p-8 border border-gray-800 hover:border-pink-500/50 transition-all duration-300 transform hover:scale-[1.02]">
-                  <div className="flex items-start gap-6 mb-6">
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${charity.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                      <IconComponent className="text-white" size={28} />
-                    </div>
-                    
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold text-white mb-2">{charity.name}</h2>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="bg-pink-500/20 text-pink-400 px-3 py-1 rounded-full text-sm font-medium">
-                          {charity.cause}
-                        </span>
-                        <span className="text-gray-400 text-sm">{charity.impact}</span>
-                      </div>
-                    </div>
+      <section style={{ padding: '64px 0' }}>
+        <div style={containerStyle}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '32px' 
+          }}>
+            {charities.map((charity) => (
+              <div key={charity.id} style={{
+                background: 'rgba(17, 24, 39, 0.3)',
+                borderRadius: '16px',
+                padding: '32px',
+                border: '1px solid rgba(55, 65, 81, 1)',
+                transition: 'all 0.3s ease',
+                transform: 'scale(1)',
+              }} 
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.02)';
+                e.currentTarget.style.borderColor = 'rgba(236, 72, 153, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.borderColor = 'rgba(55, 65, 81, 1)';
+              }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '24px' }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '12px',
+                    background: colorMap[charity.color],
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    fontSize: '1.75rem',
+                    transition: 'transform 0.3s ease'
+                  }} className="charity-icon">
+                    {charity.icon}
                   </div>
                   
-                  <p className="text-gray-300 leading-relaxed mb-6">
-                    {charity.description}
-                  </p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-400">
-                      Learn more about their mission
+                  <div style={{ flex: 1 }}>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>
+                      {charity.name}
+                    </h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                      <span style={{
+                        backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                        color: '#ec4899',
+                        padding: '4px 12px',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500'
+                      }}>
+                        {charity.cause}
+                      </span>
+                      <span style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+                        {charity.impact}
+                      </span>
                     </div>
-                    <a 
-                      href={charity.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105"
-                    >
-                      Visit Website
-                      <ExternalLink size={16} />
-                    </a>
                   </div>
                 </div>
-              );
-            })}
+                
+                <p style={{ color: '#d1d5db', lineHeight: '1.6', marginBottom: '24px' }}>
+                  {charity.description}
+                </p>
+                
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '0.875rem', color: '#9ca3af' }}>
+                    Learn more about their mission
+                  </div>
+                  <a 
+                    href={charity.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      backgroundColor: '#ec4899',
+                      color: 'white',
+                      padding: '12px 24px',
+                      borderRadius: '8px',
+                      fontWeight: '500',
+                      textDecoration: 'none',
+                      transition: 'all 0.3s ease',
+                      transform: 'scale(1)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = '#db2777';
+                      e.target.style.transform = 'scale(1.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = '#ec4899';
+                      e.target.style.transform = 'scale(1)';
+                    }}
+                  >
+                    Visit Website
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* How Support Works */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              How Your Support <span className="text-pink-500">Makes a Difference</span>
+      <section style={{ padding: '64px 0', background: 'rgba(3, 7, 18, 0.5)' }}>
+        <div style={{ ...containerStyle, maxWidth: '1024px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>
+              How Your Support <span style={{ color: '#ec4899' }}>Makes a Difference</span>
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p style={{ color: '#9ca3af', fontSize: '1.125rem' }}>
               Every purchase, stream, and share contributes to meaningful change
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">25%</span>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '32px' 
+          }}>
+            <div style={{ textAlign: 'center', padding: '24px', background: 'rgba(17, 24, 39, 0.3)', borderRadius: '12px', border: '1px solid rgba(55, 65, 81, 1)' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(45deg, #ec4899, #f43f5e)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px auto'
+              }}>
+                <span style={{ color: 'white', fontWeight: 'bold' }}>25%</span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Music Sales</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'white', marginBottom: '8px' }}>Music Sales</h3>
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
                 25% of all digital music sales and streaming revenue
               </p>
             </div>
             
-            <div className="text-center p-6 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">15%</span>
+            <div style={{ textAlign: 'center', padding: '24px', background: 'rgba(17, 24, 39, 0.3)', borderRadius: '12px', border: '1px solid rgba(55, 65, 81, 1)' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(45deg, #8b5cf6, #6366f1)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px auto'
+              }}>
+                <span style={{ color: 'white', fontWeight: 'bold' }}>15%</span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Merchandise</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'white', marginBottom: '8px' }}>Merchandise</h3>
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
                 15% of merchandise profits support advocacy work
               </p>
             </div>
             
-            <div className="text-center p-6 bg-gray-900/30 rounded-xl border border-gray-800">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-white font-bold">50%</span>
+            <div style={{ textAlign: 'center', padding: '24px', background: 'rgba(17, 24, 39, 0.3)', borderRadius: '12px', border: '1px solid rgba(55, 65, 81, 1)' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(45deg, #06b6d4, #3b82f6)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px auto'
+              }}>
+                <span style={{ color: 'white', fontWeight: 'bold' }}>50%</span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Special Events</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: 'white', marginBottom: '8px' }}>Special Events</h3>
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
                 50% of charity concert proceeds go directly to causes
               </p>
             </div>
@@ -174,35 +311,87 @@ const Charities = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Join the <span className="text-pink-500">Movement</span>
+      <section style={{ padding: '64px 0' }}>
+        <div style={{ ...containerStyle, maxWidth: '768px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: 'white', marginBottom: '24px' }}>
+            Join the <span style={{ color: '#ec4899' }}>Movement</span>
           </h2>
-          <p className="text-gray-300 text-lg leading-relaxed mb-8">
+          <p style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: '1.6', marginBottom: '32px' }}>
             Your support for Hāịlō's music creates a ripple effect of positive change. 
             Together, we can amplify voices, support communities, and make a real difference 
             in the world through the power of music and advocacy.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px', 
+            alignItems: 'center'
+          }}>
             <a 
               href="/music"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-4 rounded-full font-medium hover:from-pink-500 hover:to-purple-500 transition-all duration-300 transform hover:scale-105"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+                color: 'white',
+                padding: '16px 32px',
+                borderRadius: '50px',
+                fontWeight: '500',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease',
+                transform: 'scale(1)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'scale(1)';
+              }}
             >
-              <Heart size={20} />
+              <span style={{ fontSize: '1.25rem' }}>♥</span>
               Support Through Music
             </a>
             <a 
               href="/merchandise"
-              className="inline-flex items-center gap-2 border border-pink-500/50 text-pink-300 px-8 py-4 rounded-full font-medium hover:bg-pink-500/10 hover:border-pink-400 transition-all duration-300 transform hover:scale-105"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: '2px solid rgba(236, 72, 153, 0.5)',
+                color: '#f9a8d4',
+                padding: '16px 32px',
+                borderRadius: '50px',
+                fontWeight: '500',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease',
+                backgroundColor: 'transparent',
+                transform: 'scale(1)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'rgba(236, 72, 153, 0.1)';
+                e.target.style.borderColor = '#ec4899';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.borderColor = 'rgba(236, 72, 153, 0.5)';
+                e.target.style.transform = 'scale(1)';
+              }}
             >
               Shop for Change
-              <ExternalLink size={20} />
+              <span>↗</span>
             </a>
           </div>
         </div>
       </section>
+
+      <style>{`
+        .charity-icon:hover {
+          transform: scale(1.1) !important;
+        }
+      `}</style>
     </div>
   );
 };
