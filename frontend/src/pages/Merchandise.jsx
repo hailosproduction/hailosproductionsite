@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Filter, ExternalLink, Heart } from 'lucide-react';
 
 const Merchandise = () => {
   const [selectedType, setSelectedType] = useState('all');
@@ -92,86 +91,171 @@ const Merchandise = () => {
     setCart([...cart, item]);
   };
 
+  const pageStyle = {
+    paddingTop: '64px',
+    minHeight: '100vh',
+    backgroundColor: '#030712',
+    color: 'white'
+  };
+
+  const heroStyle = {
+    padding: '64px 0',
+    background: 'linear-gradient(135deg, #030712 0%, #111827 50%, rgba(147, 51, 234, 0.2) 100%)',
+    textAlign: 'center'
+  };
+
+  const containerStyle = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    padding: '0 16px'
+  };
+
+  const gradientTextStyle = {
+    background: 'linear-gradient(45deg, #ec4899, #8b5cf6)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text'
+  };
+
   return (
-    <div className="pt-16 min-h-screen">
+    <div style={pageStyle}>
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-950 via-gray-900 to-purple-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Merchandise</span>
+      <section style={heroStyle}>
+        <div style={containerStyle}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
+            fontWeight: 'bold', 
+            marginBottom: '24px' 
+          }}>
+            <span style={gradientTextStyle}>Merchandise</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed mb-4">
+          <p style={{ 
+            fontSize: '1.25rem', 
+            color: '#d1d5db',
+            maxWidth: '48rem',
+            margin: '0 auto 16px auto'
+          }}>
             Support the music and advocacy through meaningful merchandise
           </p>
-          <div className="flex items-center justify-center gap-2 text-pink-400">
-            <Heart size={16} />
-            <span className="text-sm">Proceeds support charitable causes</span>
-            <Heart size={16} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#ec4899' }}>
+            <span>♥</span>
+            <span style={{ fontSize: '0.875rem' }}>Proceeds support charitable causes</span>
+            <span>♥</span>
           </div>
         </div>
       </section>
 
       {/* Featured Items */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">
-            Featured <span className="text-pink-500">Items</span>
+      <section style={{ padding: '64px 0' }}>
+        <div style={containerStyle}>
+          <h2 style={{ 
+            fontSize: '2.25rem', 
+            fontWeight: 'bold', 
+            color: 'white', 
+            marginBottom: '32px', 
+            textAlign: 'center' 
+          }}>
+            Featured <span style={{ color: '#ec4899' }}>Items</span>
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '32px',
+            marginBottom: '64px'
+          }}>
             {featuredMerch.map((item) => (
-              <div key={item.id} className="group bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300">
-                <div className="aspect-square overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+              <div key={item.id} style={{
+                background: 'rgba(17, 24, 39, 0.3)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid rgba(55, 65, 81, 1)',
+                transition: 'all 0.3s ease'
+              }}>
+                <div style={{
+                  aspectRatio: '1',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+                  position: 'relative'
+                }}>
                   <img 
                     src={item.image} 
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   {!item.inStock && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="bg-red-500 text-white px-4 py-2 rounded-lg font-medium">
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <span style={{
+                        backgroundColor: '#ef4444',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        fontWeight: '500'
+                      }}>
                         Out of Stock
                       </span>
                     </div>
                   )}
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{item.name}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{item.description}</p>
+                <div style={{ padding: '24px' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: 'white', marginBottom: '8px' }}>
+                    {item.name}
+                  </h3>
+                  <p style={{ color: '#9ca3af', fontSize: '0.875rem', marginBottom: '16px', lineHeight: '1.5' }}>
+                    {item.description}
+                  </p>
                   
                   {item.sizes && (
-                    <div className="mb-3">
-                      <span className="text-xs text-gray-500">Available sizes: </span>
-                      <span className="text-xs text-pink-400">{item.sizes.join(', ')}</span>
+                    <div style={{ marginBottom: '12px' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Available sizes: </span>
+                      <span style={{ fontSize: '0.75rem', color: '#ec4899' }}>{item.sizes.join(', ')}</span>
                     </div>
                   )}
                   
                   {item.materials && (
-                    <div className="mb-3">
-                      <span className="text-xs text-gray-500">Materials: </span>
-                      <span className="text-xs text-pink-400">{item.materials.join(', ')}</span>
+                    <div style={{ marginBottom: '12px' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Materials: </span>
+                      <span style={{ fontSize: '0.75rem', color: '#ec4899' }}>{item.materials.join(', ')}</span>
                     </div>
                   )}
                   
                   {item.formats && (
-                    <div className="mb-3">
-                      <span className="text-xs text-gray-500">Formats: </span>
-                      <span className="text-xs text-pink-400">{item.formats.join(', ')}</span>
+                    <div style={{ marginBottom: '12px' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Formats: </span>
+                      <span style={{ fontSize: '0.75rem', color: '#ec4899' }}>{item.formats.join(', ')}</span>
                     </div>
                   )}
                   
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-pink-400">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '2rem', fontWeight: 'bold', color: '#ec4899' }}>
                       ${item.price.toFixed(2)}
                     </span>
                     <button 
                       onClick={() => addToCart(item)}
                       disabled={!item.inStock}
-                      className="bg-pink-500 hover:bg-pink-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 flex items-center gap-2"
+                      style={{
+                        backgroundColor: item.inStock ? '#ec4899' : '#6b7280',
+                        color: 'white',
+                        padding: '12px 24px',
+                        borderRadius: '8px',
+                        fontWeight: '500',
+                        border: 'none',
+                        cursor: item.inStock ? 'pointer' : 'not-allowed',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'background-color 0.3s ease'
+                      }}
                     >
-                      <ShoppingCart size={16} />
-                      {item.inStock ? 'Add to Cart' : 'Out of Stock'}
+                      🛒 {item.inStock ? 'Add to Cart' : 'Out of Stock'}
                     </button>
                   </div>
                 </div>
@@ -182,25 +266,49 @@ const Merchandise = () => {
       </section>
 
       {/* All Items */}
-      <section className="py-16 bg-gray-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4 sm:mb-0">
-              All <span className="text-pink-500">Merchandise</span>
+      <section style={{ padding: '64px 0', background: 'rgba(3, 7, 18, 0.5)' }}>
+        <div style={containerStyle}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px',
+            alignItems: 'center',
+            marginBottom: '32px'
+          }}>
+            <h2 style={{ 
+              fontSize: '2.25rem', 
+              fontWeight: 'bold', 
+              color: 'white',
+              margin: 0
+            }}>
+              All <span style={{ color: '#ec4899' }}>Merchandise</span>
             </h2>
             
             {/* Type Filter */}
-            <div className="flex items-center gap-2 bg-gray-900/50 rounded-lg p-1">
-              <Filter className="text-gray-400 ml-2" size={16} />
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(17, 24, 39, 0.5)',
+              borderRadius: '8px',
+              padding: '4px'
+            }}>
+              <span style={{ color: '#9ca3af', fontSize: '1rem', marginLeft: '8px' }}>🛍️</span>
               {merchTypes.map((type) => (
                 <button
                   key={type}
                   onClick={() => setSelectedType(type)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    selectedType === type
-                      ? 'bg-pink-500 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: selectedType === type ? '#ec4899' : 'transparent',
+                    color: selectedType === type ? 'white' : '#9ca3af'
+                  }}
                 >
                   {typeLabels[type]}
                 </button>
@@ -208,36 +316,96 @@ const Merchandise = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+            gap: '24px' 
+          }}>
             {filteredMerch.map((item) => (
-              <div key={item.id} className="bg-gray-900/30 rounded-xl overflow-hidden border border-gray-800 hover:border-pink-500/50 transition-all duration-300 group">
-                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-pink-500/20 to-purple-500/20">
+              <div key={item.id} style={{
+                background: 'rgba(17, 24, 39, 0.3)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid rgba(55, 65, 81, 1)',
+                transition: 'all 0.3s ease'
+              }}>
+                <div style={{
+                  position: 'relative',
+                  aspectRatio: '1',
+                  overflow: 'hidden',
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))'
+                }}>
                   <img 
                     src={item.image} 
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   {!item.inStock && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="bg-red-500 text-white px-3 py-1 rounded text-sm font-medium">
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <span style={{
+                        backgroundColor: '#ef4444',
+                        color: 'white',
+                        padding: '6px 12px',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500'
+                      }}>
                         Out of Stock
                       </span>
                     </div>
                   )}
                 </div>
                 
-                <div className="p-4">
-                  <h3 className="text-white font-semibold mb-1 line-clamp-1">{item.name}</h3>
-                  <p className="text-gray-400 text-xs mb-3 line-clamp-2">{item.description}</p>
+                <div style={{ padding: '16px' }}>
+                  <h3 style={{ 
+                    color: 'white', 
+                    fontWeight: '600', 
+                    marginBottom: '4px',
+                    fontSize: '1rem',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}>
+                    {item.name}
+                  </h3>
+                  <p style={{ 
+                    color: '#9ca3af', 
+                    fontSize: '0.75rem', 
+                    marginBottom: '12px',
+                    lineHeight: '1.4',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
+                  }}>
+                    {item.description}
+                  </p>
                   
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-pink-400">
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#ec4899' }}>
                       ${item.price.toFixed(2)}
                     </span>
                     <button 
                       onClick={() => addToCart(item)}
                       disabled={!item.inStock}
-                      className="bg-pink-500 hover:bg-pink-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-300"
+                      style={{
+                        backgroundColor: item.inStock ? '#ec4899' : '#6b7280',
+                        color: 'white',
+                        padding: '6px 12px',
+                        borderRadius: '6px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        border: 'none',
+                        cursor: item.inStock ? 'pointer' : 'not-allowed',
+                        transition: 'background-color 0.3s ease'
+                      }}
                     >
                       {item.inStock ? 'Add' : 'N/A'}
                     </button>
@@ -251,7 +419,16 @@ const Merchandise = () => {
 
       {/* Cart notification */}
       {cart.length > 0 && (
-        <div className="fixed bottom-4 right-4 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-lg">
+        <div style={{
+          position: 'fixed',
+          bottom: '16px',
+          right: '16px',
+          backgroundColor: '#ec4899',
+          color: 'white',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
           Cart: {cart.length} item{cart.length > 1 ? 's' : ''}
         </div>
       )}
